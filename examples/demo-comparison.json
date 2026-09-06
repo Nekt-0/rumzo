@@ -1,0 +1,56 @@
+{
+  "before": "11111111-1111-4111-8111-111111111111",
+  "after": "22222222-2222-4222-8222-222222222222",
+  "from": "2026-09-06T09:00:00.000Z",
+  "to": "2026-09-06T11:00:00.000Z",
+  "code": {
+    "status": "complete",
+    "changed": [
+      {
+        "path": "src/receipts.ts",
+        "kind": "source",
+        "change": "modified"
+      },
+      {
+        "path": "src/compare.ts",
+        "kind": "source",
+        "change": "added"
+      },
+      {
+        "path": "test/receipts.test.ts",
+        "kind": "tests",
+        "change": "modified"
+      },
+      {
+        "path": "README.md",
+        "kind": "docs",
+        "change": "modified"
+      }
+    ],
+    "counts": {
+      "source": 2,
+      "tests": 1,
+      "docs": 1,
+      "config": 0,
+      "generated": 0,
+      "other": 0
+    }
+  },
+  "chain": [
+    {
+      "field": "creatorTaxBps",
+      "before": {
+        "status": "known",
+        "value": 100,
+        "source": "https://example.invalid/rumzo-demo"
+      },
+      "after": {
+        "status": "known",
+        "value": 50,
+        "source": "https://example.invalid/rumzo-demo"
+      }
+    }
+  ],
+  "warnings": [],
+  "demo": true
+}

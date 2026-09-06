@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "demo": true,
+  "id": "11111111-1111-4111-8111-111111111111",
+  "createdAt": "2026-09-06T09:00:00.000Z",
+  "input": {
+    "token": "0x1111111111111111111111111111111111111111",
+    "repository": "demo/receipt-lab"
+  },
+  "github": {
+    "status": "ok",
+    "repository": "demo/receipt-lab",
+    "url": "https://example.invalid/rumzo-demo",
+    "observedAt": "2026-09-06T09:00:00.000Z",
+    "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "defaultBranch": "main",
+    "classification": "Source files present",
+    "treeComplete": true,
+    "files": [
+      {
+        "path": "src/inspect.ts",
+        "kind": "source",
+        "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "mode": "100644"
+      },
+      {
+        "path": "src/receipts.ts",
+        "kind": "source",
+        "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "mode": "100644"
+      },
+      {
+        "path": "test/receipts.test.ts",
+        "kind": "tests",
+        "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "mode": "100644"
+      },
+      {
+        "path": "README.md",
+        "kind": "docs",
+        "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "mode": "100644"
+      },
+      {
+        "path": "package.json",
+        "kind": "config",
+        "sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "mode": "100644"
+      }
+    ],
+    "counts": {
+      "source": 2,
+      "tests": 1,
+      "docs": 1,
+      "config": 1,
+      "generated": 0,
+      "other": 0
+    },
+    "readmeTokenReference": {
+      "status": "known",
+      "value": true,
+      "source": "https://example.invalid/rumzo-demo"
+    },
+    "launchHints": [
+      {
+        "path": "package.json",
+        "hint": "Declared scripts: build, test, start. Not executed.",
+        "source": "https://example.invalid/rumzo-demo"
+      }
+    ],
+    "latestCommit": {
+      "message": "Add receipt export",
+      "date": "2026-09-06T08:45:00.000Z",
+      "url": "https://example.invalid/rumzo-demo",
+      "files": [
+        {
+          "path": "src/receipts.ts",
+          "kind": "source",
+          "change": "added"
+        }
+      ],
+      "complete": true
+    },
+    "warnings": [
+      "Synthetic repository and revisions, provided only to demonstrate the interface."
+    ]
+  },
+  "chain": {
+    "status": "ok",
+    "chainId": 4663,
+    "token": "0x1111111111111111111111111111111111111111",
+    "factory": "0x1111111111111111111111111111111111111111",
+    "observedAt": "2026-09-06T09:00:00.000Z",
+    "blockNumber": "100000",
+    "blockTime": "2026-09-06T09:00:00.000Z",
+    "fields": {
+      "name": {
+        "status": "known",
+        "value": "Demo asset",
+        "source": "https://example.invalid/rumzo-demo"
+      },
+      "symbol": {
+        "status": "known",
+        "value": "DEMO",
+        "source": "https://example.invalid/rumzo-demo"
+      },
+      "protocol": {
+        "status": "known",
+        "value": "pons v2",
+        "source": "https://example.invalid/rumzo-demo"
+      },
+      "phase": {
+        "status": "known",
+        "value": 0,
+        "source": "https://example.invalid/rumzo-demo"
+      },
+      "creatorTaxBps": {
+        "status": "known",
+        "value": 100,
+        "source": "https://example.invalid/rumzo-demo"
+      },
+      "curveFeeBps": {
+        "status": "known",
+        "value": 100,
+        "source": "https://example.invalid/rumzo-demo"
+      },
+      "hookFeeBps": {
+        "status": "known",
+        "value": 100,
+        "source": "https://example.invalid/rumzo-demo"
+      },
+      "buybackEnabled": {
+        "status": "known",
+        "value": false,
+        "source": "https://example.invalid/rumzo-demo"
+      },
+      "isLocked": {
+        "status": "known",
+        "value": false,
+        "source": "https://example.invalid/rumzo-demo"
+      }
+    },
+    "warnings": [
+      "All contract values, addresses and block numbers in this tour are invented."
+    ]
+  },
+  "limitations": [
+    "DEMO — synthetic data. Not a live inspection, deployed token, or investment claim."
+  ]
+}

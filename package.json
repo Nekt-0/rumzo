@@ -1,0 +1,31 @@
+{
+  "name": "rumzo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A curious raccoon bringing receipts on builder tokens. Public GitHub evidence and Robinhood Chain snapshots.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "packageManager": "pnpm@11.19.0",
+  "bin": {
+    "rumzo": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/cli.js serve",
+    "inspect": "node dist/cli.js inspect",
+    "test": "node --test test/*.test.mjs",
+    "check": "pnpm run build && pnpm run test",
+    "test:coverage": "node --experimental-test-coverage --test test/*.test.mjs",
+    "demo:export": "node scripts/export-demo.mjs"
+  },
+  "dependencies": {
+    "viem": "2.56.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.3"
+  }
+}
