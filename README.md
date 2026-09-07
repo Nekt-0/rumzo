@@ -58,7 +58,7 @@ pnpm demo:terminal
 
 The tour uses the same labelled synthetic receipts as the web demo. It makes no provider requests and writes no live snapshots. Use a terminal at least 96 columns wide, or `pnpm demo:terminal --instant` to print all stages without pauses.
 
-[Watch the terminal demo — MP4, 1080p](assets/demos/rumzo-demo.mp4). The clip presents the command's actual synthetic output with a RUMZO frame and mascot. See [demo notes](docs/DEMO-VIDEO.md).
+[Watch the terminal demo — MP4, 1080p](assets/demos/rumzo-demo.mp4). The clip presents synthetic receipts, file details and their comparison with a RUMZO frame and mascot. See [demo notes](docs/DEMO-VIDEO.md).
 
 ![RUMZO terminal-style synthetic receipt with separate repository evidence, on-chain settings and snapshot comparison](assets/terminal-demo.svg)
 

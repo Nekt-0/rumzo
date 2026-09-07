@@ -15,7 +15,7 @@
 | screenshots/home.png | Clean application start screen | Captured from the running app |
 | screenshots/receipt.png | Two evidence panels | Captured with labelled synthetic demo data |
 | screenshots/comparison.png | File and contract-value differences | Captured with labelled synthetic demo data |
-| demos/rumzo-demo.mp4 | Short terminal tour, 1920 × 1080, 30 fps | Actual offline demo output, presented in a video frame with the RUMZO mascot |
+| demos/rumzo-demo.mp4 | Short terminal tour, 1920 × 1080, 30 fps | Offline demo output and expanded details from shared fixtures, presented with the RUMZO mascot |
 | demos/rumzo-demo-poster.png | Final frame of the terminal tour | Rendered from the same command output as the video |
 
 The original avatar and empty-history character retain transparency. The square profile avatar, banner and workbench scene have opaque backgrounds. SVG files use the project palette and contain no scripts or external references. Screenshots show actual UI rendering; demo values are illustrative, not on-chain findings.
