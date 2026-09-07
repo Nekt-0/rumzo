@@ -16,6 +16,6 @@ The command prints six stages over approximately 20 seconds, then exits. It does
 
 ## Video production
 
-The video presents the command's actual output as one continuous terminal transcript, with repeated headings removed. Lines appear progressively. At 13.5 seconds the view begins a smooth downward scroll to the comparison; at 20.5 seconds it scrolls back to the beginning. A brief typed-command introduction, the RUMZO mascot and final holding time were added for presentation. The DEMO label stays fixed above the scrolling content. This is an edited terminal demonstration, not a live-chain recording. It has no soundtrack or voiceover.
+The video presents the command's actual output as one continuous terminal transcript, with repeated headings removed. It opens directly on RUMZO, with lines appearing progressively and no typed command introduction. At 13.5 seconds the view begins a smooth downward scroll to the comparison; at 20.5 seconds it scrolls back to the beginning. The RUMZO mascot and final holding time were added for presentation. The DEMO label stays fixed above the scrolling content. This is an edited terminal demonstration, not a live-chain recording. It has no soundtrack or voiceover.
 
 Format: H.264 MP4, 1920 × 1080, 30 fps, 28 seconds, with fast-start playback. The poster shows the return to the top of the transcript. The video and poster use only RUMZO assets and output.
