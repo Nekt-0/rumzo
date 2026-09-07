@@ -6,7 +6,7 @@ import { toMarkdown } from './reports/markdown.js';
 import { SnapshotStore } from './storage/snapshots.js';
 import { startServer } from './server/app.js';
 
-const HELP = `RUMZO 0.1 — Show the receipts.
+const HELP = `RUMZO 0.2 — Show the receipts.
 
   pnpm start
   node dist/cli.js serve [--port 4317]

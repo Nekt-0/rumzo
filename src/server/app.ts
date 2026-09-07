@@ -37,7 +37,7 @@ export function createApp(options: { store?: SnapshotStore; inspector?: typeof i
     if (req.headers.origin && req.headers.origin !== origin) { json(res, 403, { error: 'Cross-origin requests are not allowed.' }); return; }
     const url = new URL(req.url || '/', origin);
     try {
-      if (req.method === 'GET' && url.pathname === '/api/health') { json(res, 200, { name: 'rumzo', version: '0.1.0', chainId: 4663 }); return; }
+      if (req.method === 'GET' && url.pathname === '/api/health') { json(res, 200, { name: 'rumzo', version: '0.2.0', chainId: 4663 }); return; }
       if (req.method === 'GET' && url.pathname === '/api/demo') { json(res, 200, demoSession()); return; }
       if (req.method === 'GET' && url.pathname === '/api/demo.md') {
         res.writeHead(200, { 'Content-Type': 'text/markdown; charset=utf-8', 'Content-Disposition': 'attachment; filename="rumzo-demo.md"' });

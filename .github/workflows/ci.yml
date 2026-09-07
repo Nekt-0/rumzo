@@ -23,3 +23,5 @@ jobs:
       - uses: pnpm/action-setup@v6
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm run check
+      - if: matrix.node == 24
+        run: pnpm run site:check

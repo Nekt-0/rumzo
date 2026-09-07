@@ -1,4 +1,3 @@
-import { Buffer } from 'node:buffer';
 import { parseRepository } from '../input.js';
 import { emptyCounts, type GitHubSnapshot, type Entry } from '../types.js';
 import { classifyPath, classifyRepository } from './classify.js';
@@ -6,13 +5,20 @@ import { GitHubClient } from './client.js';
 
 const blobLink = (repo: string, sha: string, path: string) => `https://github.com/${repo}/blob/${sha}/${path.split('/').map(encodeURIComponent).join('/')}`;
 
+function decodeBase64Text(value: string): string {
+  const binary = atob(value.replace(/\s/g, ''));
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0; index < binary.length; index++) bytes[index] = binary.charCodeAt(index);
+  return new TextDecoder().decode(bytes);
+}
+
 export async function inspectGitHub(repository: string, token: string, client = new GitHubClient()): Promise<GitHubSnapshot> {
   const { fullName } = parseRepository(repository);
   const base = `/repos/${fullName}`;
   const result: GitHubSnapshot = { status: 'unavailable', repository: fullName, url: `https://github.com/${fullName}`, observedAt: new Date().toISOString(), warnings: [] };
   try {
     const { data: metadata } = await client.get(base);
-    if (metadata.private) throw new Error('RUMZO v0.1 inspects public repositories only.');
+    if (metadata.private) throw new Error('RUMZO v0.2 inspects public repositories only.');
     result.description = metadata.description || '';
     result.defaultBranch = metadata.default_branch;
     result.archived = Boolean(metadata.archived);
@@ -49,7 +55,7 @@ export async function inspectGitHub(repository: string, token: string, client = 
       if (file.mode === '120000' || file.mode === '160000' || (file.size || 0) > 128000) throw new Error('File outside inspection limits.');
       const { data } = await client.get(`${base}/git/blobs/${file.sha}`);
       if (data.encoding !== 'base64') throw new Error('Unsupported blob encoding.');
-      return Buffer.from(data.content, 'base64').toString('utf8');
+      return decodeBase64Text(data.content);
     };
     result.launchHints = [];
     for (const file of result.files!.filter(f => /(^|\/)(package\.json|pyproject\.toml|cargo\.toml|go\.mod)$/i.test(f.path) && f.kind !== 'generated').slice(0, 6)) {

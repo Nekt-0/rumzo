@@ -1,5 +1,6 @@
 const $ = id => document.getElementById(id);
 let current = null, saved = [], demo = null;
+const STORAGE_KEY = 'rumzo-receipts-v1';
 const el = (tag, text, className) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (className) n.className = className; return n; };
 function link(label, href) { if (current?.demo) return el('span', label); const a = el('a', label); a.href = href; a.target = '_blank'; a.rel = 'noreferrer'; return a; }
 function row(label, value, source, mono = false) {
@@ -9,6 +10,60 @@ function row(label, value, source, mono = false) {
 }
 function note(text) { return el('p', text, 'note'); }
 const time = value => { const d = new Date(value); return Number.isNaN(d.getTime()) ? 'Unknown date' : d.toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' }) + ' UTC'; };
+const emptyCounts = () => ({ source: 0, tests: 0, docs: 0, config: 0, generated: 0, other: 0 });
+function loadReports() {
+  try {
+    const value = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    return Array.isArray(value) ? value.filter(report => report?.schemaVersion === 1 && !report.demo).slice(0, 12) : [];
+  } catch { return []; }
+}
+function saveReport(report) {
+  const reports = [report, ...loadReports().filter(item => item.id !== report.id)].slice(0, 12);
+  while (reports.length) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(reports)); saved = reports; return true; }
+    catch { reports.pop(); }
+  }
+  return false;
+}
+function compareReports(before, after) {
+  if (!before || !after || before.schemaVersion !== 1 || after.schemaVersion !== 1) throw new Error('Unsupported report schema.');
+  if (Boolean(before.demo) !== Boolean(after.demo)) throw new Error('Demo data cannot be compared with live evidence.');
+  if (before.input.token.toLowerCase() !== after.input.token.toLowerCase() || before.input.repository.toLowerCase() !== after.input.repository.toLowerCase()) throw new Error('Compare receipts for the same token and repository.');
+  const out = { before: before.id, after: after.id, from: before.createdAt, to: after.createdAt, code: { status: 'unknown', changed: [], counts: emptyCounts() }, chain: [], warnings: [] };
+  if (before.demo && after.demo) out.demo = true;
+  if (before.github.status === 'unavailable' || after.github.status === 'unavailable' || !before.github.files || !after.github.files) out.code.reason = 'Both receipts need readable file trees. Missing data is not an empty repository.';
+  else {
+    const complete = Boolean(before.github.treeComplete && after.github.treeComplete); out.code.status = complete ? 'complete' : 'partial';
+    const old = new Map(before.github.files.map(file => [file.path, file])); const next = new Map(after.github.files.map(file => [file.path, file]));
+    for (const [path, file] of next) { const prior = old.get(path); if (prior && (prior.sha !== file.sha || prior.mode !== file.mode)) out.code.changed.push({ path, kind: file.kind, change: 'modified' }); else if (!prior && before.github.treeComplete) out.code.changed.push({ path, kind: file.kind, change: 'added' }); }
+    if (after.github.treeComplete) for (const [path, file] of old) if (!next.has(path)) out.code.changed.push({ path, kind: file.kind, change: 'removed' });
+    for (const file of out.code.changed) out.code.counts[file.kind]++;
+    if (!complete) out.warnings.push('Incomplete trees: additions and removals appear only when the corresponding absence is established.');
+  }
+  for (const field of new Set([...Object.keys(before.chain.fields), ...Object.keys(after.chain.fields)])) {
+    const a = before.chain.fields[field] || { status: 'unknown' }, b = after.chain.fields[field] || { status: 'unknown' };
+    if (a.status !== 'known' || b.status !== 'known') { if (a.status !== b.status) out.warnings.push(`${field}: availability changed; this is not proof of a value change.`); continue; }
+    if (a.value !== b.value) out.chain.push({ field, before: a, after: b });
+  }
+  return out;
+}
+const mdEscape = value => String(value ?? '').replace(/[\\`*_{}\[\]<>|]/g, '\\$&').replace(/[\r\n]+/g, ' ');
+const factText = fact => !fact ? 'Unknown' : fact.status === 'known' ? String(fact.value) : `Unknown: ${fact.reason}`;
+function toMarkdown(report) {
+  const g = report.github, c = report.chain;
+  const lines = ['# RUMZO — builder receipts', '', `Observed: ${report.createdAt}`, `Snapshot: ${report.id}`, '', `Token: \`${report.input.token}\``, `Repository: ${g.url}`, '', '## GitHub', '', `Status: ${g.status}`, `Revision: ${g.sha || 'Unknown'}`, `Classification: ${g.classification || 'Unknown'}`, ''];
+  if (g.error) lines.push(mdEscape(g.error), ''); if (report.demo) lines.splice(2, 0, '> DEMO — synthetic data. No live inspection was performed.', '');
+  if (g.counts) for (const [kind, count] of Object.entries(g.counts)) lines.push(`- ${kind}: ${count} observed files`);
+  lines.push('', `README token reference: ${mdEscape(factText(g.readmeTokenReference))}`, '');
+  for (const hint of g.launchHints || []) lines.push(`- [${mdEscape(hint.path)}](${hint.source}): ${mdEscape(hint.hint)}`);
+  if (g.latestCommit) lines.push('', `Latest commit: ${mdEscape(g.latestCommit.message)}`, g.latestCommit.url);
+  lines.push('', '## Robinhood Chain / pons v2', '', `Status: ${c.status}`, `Block: ${c.blockNumber || 'Unknown'}`, `Block time: ${c.blockTime || 'Unknown'}`, '');
+  if (c.error) lines.push(mdEscape(c.error), '');
+  for (const [field, fact] of Object.entries(c.fields)) lines.push(`- **${field}**: ${mdEscape(factText(fact))}${fact.status === 'known' ? ` ([source](${fact.source}))` : ''}`);
+  lines.push('', '## Coverage and limits', '', ...[...g.warnings, ...c.warnings, ...report.limitations].map(warning => `- ${mdEscape(warning)}`));
+  return lines.join('\n') + '\n';
+}
+function download(name, contents, type) { const url = URL.createObjectURL(new Blob([contents], { type })); const a = el('a'); a.href = url; a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
 function message(text) { $('error').hidden = !text; $('error').textContent = text || ''; }
 async function api(path, options = {}) {
   const response = await fetch(path, { ...options, signal: options.signal || AbortSignal.timeout(120000) });
@@ -102,17 +157,16 @@ function renderReport(report, comparison = null) {
   current = report; $('results').hidden = false; $('demo-notice').hidden = !report.demo;
   $('result-name').textContent = report.github.repository;
   $('result-date').textContent = `Observed ${time(report.createdAt)} · ${report.id.slice(0, 8)}`;
-  $('export-md').href = report.demo ? '/api/demo.md' : `/api/reports/${report.id}.md`;
   renderGitHub(report.github); renderChain(report.chain); renderComparison(comparison); renderBaseline();
   if (comparison) $('baseline').value = comparison.before;
   $('limits').replaceChildren(...[...report.github.warnings, ...report.chain.warnings, ...report.limitations].map(w => el('li', w)));
 }
-async function refreshHistory() {
-  saved = await api('/api/reports'); const root = $('history-list'); root.replaceChildren();
+function refreshHistory() {
+  saved = loadReports(); const root = $('history-list'); root.replaceChildren();
   if (!saved.length) { const empty = el('div', undefined, 'empty-history'); const image = el('img'); image.src = '/assets/empty-receipts.png'; image.alt = ''; image.width = 92; image.height = 92; empty.append(image, el('p', 'No receipts yet. Start an inspection or explore the demo.', 'muted')); root.append(empty); }
   for (const r of saved.slice(0, 12)) {
     const container = el('div', undefined, 'history-row'); const text = el('div'); text.append(el('p', r.input.repository), el('small', `${time(r.createdAt)} · GitHub ${r.github} / chain ${r.chain}`));
-    const button = el('button', 'Open'); button.type = 'button'; button.addEventListener('click', async () => { try { message(''); renderReport(await api(`/api/reports/${r.id}`)); } catch(e) { message(e.message); } }); container.append(text, button); root.append(container);
+    const button = el('button', 'Open'); button.type = 'button'; button.addEventListener('click', () => { message(''); renderReport(r); }); container.append(text, button); root.append(container);
   }
   renderBaseline();
 }
@@ -120,13 +174,16 @@ $('demo-button').addEventListener('click', async () => { try { message(''); demo
 $('inspect-form').addEventListener('submit', async event => {
   event.preventDefault(); message(''); const button = $('scan-button'); button.disabled = true; button.textContent = 'Reading sources…'; $('status').textContent = 'Reading GitHub and Robinhood Chain. A scan can take up to a minute.';
   try {
-    const { report, comparison } = await api('/api/inspect', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: $('token').value, repository: $('repository').value }) });
-    await refreshHistory(); renderReport(report, comparison);
-    $('status').textContent = report.github.status === 'ok' && report.chain.status === 'ok' ? 'Receipt saved. Every finding has its source.' : 'Receipt saved with coverage limits. Check the source statuses below.';
-  } catch (error) { message(error.name === 'TimeoutError' ? 'The scan timed out. Refresh saved receipts before retrying; it may still complete on the server.' : error.message); $('status').textContent = ''; }
+    const { report } = await api('/api/inspect', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: $('token').value, repository: $('repository').value }) });
+    const previous = saved.find(r => r.input.token.toLowerCase() === report.input.token.toLowerCase() && r.input.repository.toLowerCase() === report.input.repository.toLowerCase());
+    const comparison = previous ? compareReports(previous, report) : null; const stored = saveReport(report); refreshHistory(); renderReport(report, comparison);
+    const complete = report.github.status === 'ok' && report.chain.status === 'ok';
+    $('status').textContent = `${complete ? 'Receipt ready. Every finding has its source.' : 'Receipt ready with coverage limits.'}${stored ? ' Saved in this browser.' : ' Browser storage is full; download it to keep a copy.'}`;
+  } catch (error) { message(error.name === 'TimeoutError' ? 'The scan timed out. Retry in a moment.' : error.message); $('status').textContent = ''; }
   finally { button.disabled = false; button.textContent = 'Get receipts ↗'; }
 });
-$('baseline').addEventListener('change', async () => { try { message(''); const id = $('baseline').value; renderComparison(id ? current.demo ? demo.comparison : await api(`/api/compare?before=${id}&after=${current.id}`) : null); } catch(e) { message(e.message); } });
-$('export-json').addEventListener('click', () => { if (!current) return; const url = URL.createObjectURL(new Blob([JSON.stringify(current, null, 2) + '\n'], { type: 'application/json' })); const a = el('a'); a.href = url; a.download = `rumzo-${current.id}.json`; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); });
-$('refresh-history').addEventListener('click', () => refreshHistory().catch(e => message(e.message)));
-refreshHistory().catch(e => message(e.message));
+$('baseline').addEventListener('change', () => { try { message(''); const id = $('baseline').value; const before = current?.demo ? demo?.before : saved.find(report => report.id === id); renderComparison(id ? compareReports(before, current) : null); } catch(e) { message(e.message); } });
+$('export-json').addEventListener('click', () => { if (current) download(`rumzo-${current.id}.json`, JSON.stringify(current, null, 2) + '\n', 'application/json'); });
+$('export-md').addEventListener('click', () => { if (current) download(`rumzo-${current.id}.md`, toMarkdown(current), 'text/markdown'); });
+$('refresh-history').addEventListener('click', refreshHistory);
+refreshHistory();

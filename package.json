@@ -1,6 +1,6 @@
 {
   "name": "rumzo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "A curious raccoon bringing receipts on builder tokens. Public GitHub evidence and Robinhood Chain snapshots.",
   "type": "module",
@@ -20,13 +20,17 @@
     "check": "pnpm run build && pnpm run test",
     "test:coverage": "node --experimental-test-coverage --test test/*.test.mjs",
     "demo:export": "node scripts/export-demo.mjs",
-    "demo:terminal": "node scripts/demo-terminal.mjs"
+    "demo:terminal": "node scripts/demo-terminal.mjs",
+    "site:build": "node scripts/clean-site-build.mjs && vite build && node scripts/copy-site-assets.mjs",
+    "site:check": "pnpm run site:build && node scripts/verify-site.mjs"
   },
   "dependencies": {
     "viem": "2.56.3"
   },
   "devDependencies": {
+    "@openai/sites-vite-plugin": "^0.2.0",
     "@types/node": "^24.0.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite": "^8.2.2"
   }
 }

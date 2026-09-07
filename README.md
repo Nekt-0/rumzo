@@ -32,6 +32,12 @@ Paste a token address and a public GitHub repository. RUMZO records the publishe
 
 These are screenshots of the running application. The report and comparison use the built-in **synthetic demo**, visibly labelled in the interface. Its addresses, values and revisions are invented; it does not inspect or represent a deployed token.
 
+## Try it online
+
+[Open the public RUMZO app](https://rumzo.good-swan-0999.chatgpt.site).
+
+The hosted app can run the same read-only inspection for any supported public repository and token. Receipts stay in that visitor's browser and can be downloaded as JSON or Markdown. The server keeps no shared receipt database, asks for no wallet connection and has no transaction path.
+
 ## Start locally
 
 Requires **Node.js 22.13+** and **pnpm 11.19.0**. Node 24 is recommended. See the [official pnpm installation guide](https://pnpm.io/installation).
@@ -46,7 +52,7 @@ pnpm start
 
 Open **http://127.0.0.1:4317**. Select **Explore demo** for an offline walkthrough, or enter your own token and repository and select **Get receipts** for a live inspection.
 
-Demo reports stay separate from saved live receipts. They require no credentials and make no requests to GitHub or an RPC provider. The app runs on your computer and binds to loopback; it is not a hosted multi-user service.
+Demo reports stay separate from saved live receipts. They require no credentials and make no requests to GitHub or an RPC provider. The local app binds to loopback and saves live receipts in `.rumzo`; the hosted app stores them only in the visitor's browser.
 
 ## CLI
 
@@ -92,13 +98,14 @@ No wallet connection or signatures. No inspected repository code is executed. RU
 assets/                 Original PNG illustrations, SVG icons and UI screenshots
 docs/                   Architecture, methodology, testing and brand notes
 examples/               Reproducible synthetic receipts and comparison
-scripts/                Demo export utility
+scripts/                Demo, hosted-build and verification utilities
 src/
   chain/                Configuration, ABIs, transport and contract reads
   demo/                 Isolated synthetic walkthrough
   github/               API client, file classification and repository inspection
   reports/              Inspection, comparison and Markdown export
   server/               Loopback HTTP application and static assets
+  site-worker.ts        Public read-only API and static-site handoff
   storage/              Atomic local snapshot storage
   cli.ts                Terminal entry point
   input.ts              Repository/address validation
@@ -113,6 +120,7 @@ web/                    Browser interface
 pnpm run check          # TypeScript build and tests
 pnpm run test:coverage  # Tests with Node's coverage report
 pnpm run demo:export    # Regenerate synthetic examples after building
+pnpm run site:check     # Build and verify the hosted Worker bundle
 ~~~
 
 Tests exercise provider failures, pinned reads, incomplete trees, transport limits, comparisons, local HTTP behavior, exports, CLI errors and demo isolation. They use fixtures rather than live provider calls. CI runs on Node 22 and 24; inspect the [latest checks](https://github.com/Nekt-0/rumzo/actions) for the current commit.
