@@ -23,3 +23,12 @@ test('GitHub transport refuses redirects and malformed JSON', async () => {
   });
   await assert.rejects(client.get('/repos/demo/receipt-lab'), SyntaxError);
 });
+
+test('default GitHub transport does not bind global fetch to the client instance', async () => {
+  const original = globalThis.fetch; let receiver; let client;
+  globalThis.fetch = function () { receiver = this; return Promise.resolve(new Response('{}')); };
+  try {
+    client = new GitHubClient(); await client.get('/repos/demo/receipt-lab');
+    assert.notEqual(receiver, client);
+  } finally { globalThis.fetch = original; }
+});

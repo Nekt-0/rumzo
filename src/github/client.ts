@@ -1,5 +1,5 @@
 export class GitHubClient {
-  constructor(private token?: string, private fetcher: typeof fetch = fetch) {}
+  constructor(private token?: string, private fetcher: typeof fetch = (...args) => fetch(...args)) {}
   async get(path: string): Promise<{ data: any; link: string }> {
     const headers: Record<string, string> = { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'rumzo/0.2.0' };
     if (this.token) headers.Authorization = `Bearer ${this.token}`;

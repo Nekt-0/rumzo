@@ -34,7 +34,7 @@ These are screenshots of the running application. The report and comparison use 
 
 ## Try it online
 
-[Open the public RUMZO app](https://rumzo.good-swan-0999.chatgpt.site).
+[Open the public RUMZO app](https://rumzo.nikitaguguman.chatgpt.site).
 
 The hosted app can run the same read-only inspection for any supported public repository and token. Receipts stay in that visitor's browser and can be downloaded as JSON or Markdown. The server keeps no shared receipt database, asks for no wallet connection and has no transaction path.
 
