@@ -19,7 +19,8 @@
     "test": "node --test test/*.test.mjs",
     "check": "pnpm run build && pnpm run test",
     "test:coverage": "node --experimental-test-coverage --test test/*.test.mjs",
-    "demo:export": "node scripts/export-demo.mjs"
+    "demo:export": "node scripts/export-demo.mjs",
+    "demo:terminal": "node scripts/demo-terminal.mjs"
   },
   "dependencies": {
     "viem": "2.56.3"
