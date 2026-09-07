@@ -8,9 +8,17 @@ Paste a token address and a public GitHub repository. RUMZO records the publishe
 
 ![RUMZO home: token and repository inputs, demo walkthrough, and local receipt history](assets/screenshots/home.png)
 
+## How it works
+
+![RUMZO evidence pipeline: validate a repository and token, read GitHub and Robinhood Chain in parallel, then save, compare and export a pinned receipt](assets/how-it-works.svg)
+
 | Look inside | Follow the changes | Keep the evidence |
 | --- | --- | --- |
 | Pinned GitHub revision, file inventory, manifests and README association | Source, tests and documentation compared separately; contract changes only when both values are known | Local receipts, observation times, block numbers, JSON and Markdown exports |
+
+### Follow the evidence
+
+![The RUMZO raccoon at an evidence workbench, with repository and chain signals feeding a receipt printer](assets/rumzo-workbench.png)
 
 ### Read a receipt
 
@@ -39,6 +47,8 @@ Open **http://127.0.0.1:4317**. Select **Explore demo** for an offline walkthrou
 Demo reports stay separate from saved live receipts. They require no credentials and make no requests to GitHub or an RPC provider. The app runs on your computer and binds to loopback; it is not a hosted multi-user service.
 
 ## CLI
+
+![RUMZO terminal-style synthetic receipt with separate repository evidence, on-chain settings and snapshot comparison](assets/terminal-demo.svg)
 
 Replace the placeholders with the public project you want to inspect:
 

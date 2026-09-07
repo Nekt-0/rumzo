@@ -30,7 +30,7 @@ src/storage/snapshots.ts stores each live receipt as a local JSON file through a
 
 src/server/app.ts binds only to loopback, verifies Host and Origin, limits request bodies and concurrent inspections, and serves a fixed set of static files. web/app.js creates text nodes for provider strings. Credentials remain on the server; browser requests use same-origin routes.
 
-The two PNG illustrations and three SVG icons are served from an explicit asset allowlist. Documentation screenshots are repository assets, not arbitrary files exposed by the HTTP server.
+The application serves its PNG illustrations and SVG icons from an explicit asset allowlist. README diagrams and documentation screenshots remain repository assets; they are not arbitrary files exposed by the HTTP server.
 
 ## Demo boundary
 

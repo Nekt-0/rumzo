@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="760" viewBox="0 0 1600 760" role="img" aria-labelledby="title desc">
+  <title id="title">RUMZO synthetic receipt shown as a terminal session</title>
+  <desc id="desc">A read-only terminal-style summary showing repository evidence, on-chain settings and a comparison between two invented snapshots.</desc>
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#151b13"/><stop offset="1" stop-color="#0e120d"/></linearGradient>
+    <style>
+      .mono{font-family:ui-monospace,SFMono-Regular,Consolas,Liberation Mono,monospace}.head{font-size:20px;font-weight:700;fill:#e9eddf}.copy{font-size:18px;fill:#cbd4c5}.muted{fill:#758170}.accent{fill:#c7e887}.warn{fill:#f1d48a}.rule{stroke:#36422f;stroke-width:2}.tag{font-size:14px;font-weight:700;letter-spacing:1.6px}
+    </style>
+  </defs>
+  <rect width="1600" height="760" rx="24" fill="#0a0d09"/>
+  <rect x="2" y="2" width="1596" height="756" rx="22" fill="none" stroke="#36422f" stroke-width="3"/>
+  <rect x="2" y="2" width="1596" height="74" rx="22" fill="#151a13"/><path d="M2 76H1598" class="rule"/>
+  <circle cx="38" cy="38" r="8" fill="#3f493a"/><circle cx="66" cy="38" r="8" fill="#3f493a"/><circle cx="94" cy="38" r="8" fill="#3f493a"/>
+  <text x="128" y="45" class="mono head">rumzo / synthetic receipt</text>
+  <rect x="1260" y="22" width="150" height="32" rx="16" fill="#24321e" stroke="#506146"/><text x="1335" y="43" text-anchor="middle" class="mono tag accent">READ ONLY</text>
+  <text x="1438" y="44" class="mono copy muted">chain 4663</text>
+
+  <text x="42" y="118" class="mono tag accent">DEMO · INVENTED VALUES · NO LIVE INSPECTION</text>
+  <text x="42" y="161" class="mono" style="font-size:34px;font-weight:800;fill:#e9eddf">RUMZO RECEIPT</text>
+  <text x="42" y="193" class="mono copy muted">observed 2026-09-06 11:00 UTC  ·  snapshot 22222222  ·  no signer</text>
+  <path d="M42 218H1558" class="rule"/>
+
+  <g transform="translate(42 250)">
+    <rect width="735" height="286" rx="15" fill="url(#panel)" stroke="#506146"/>
+    <text x="24" y="42" class="mono tag accent">01 / REPOSITORY EVIDENCE</text>
+    <text x="24" y="80" class="mono head">demo/receipt-lab</text><text x="438" y="80" class="mono copy muted">pinned @ bbbbbbbbbbbb</text>
+    <path d="M24 101H711" class="rule"/>
+    <text x="24" y="137" class="mono copy muted">source</text><text x="177" y="137" class="mono copy">3 files</text>
+    <text x="360" y="137" class="mono copy muted">tests</text><text x="500" y="137" class="mono copy">1 file</text>
+    <text x="24" y="176" class="mono copy muted">docs</text><text x="177" y="176" class="mono copy">1 file</text>
+    <text x="360" y="176" class="mono copy muted">config</text><text x="500" y="176" class="mono copy">1 file</text>
+    <text x="24" y="219" class="mono copy muted">README link</text><text x="177" y="219" class="mono copy accent">mention found</text>
+    <text x="24" y="255" class="mono copy muted">latest</text><text x="177" y="255" class="mono copy">snapshot comparison + regression coverage</text>
+  </g>
+
+  <g transform="translate(823 250)">
+    <rect width="735" height="286" rx="15" fill="url(#panel)" stroke="#506146"/>
+    <text x="24" y="42" class="mono tag accent">02 / ON-CHAIN SETTINGS</text>
+    <text x="24" y="80" class="mono head">Demo asset</text><text x="252" y="80" class="mono copy accent">DEMO</text><text x="438" y="80" class="mono copy muted">block 100120</text>
+    <path d="M24 101H711" class="rule"/>
+    <text x="24" y="137" class="mono copy muted">protocol</text><text x="177" y="137" class="mono copy">pons v2</text>
+    <text x="360" y="137" class="mono copy muted">stage</text><text x="500" y="137" class="mono copy">curve</text>
+    <text x="24" y="176" class="mono copy muted">creator tax</text><text x="177" y="176" class="mono copy">0.5%</text>
+    <text x="360" y="176" class="mono copy muted">curve fee</text><text x="500" y="176" class="mono copy">1%</text>
+    <text x="24" y="219" class="mono copy muted">buyback</text><text x="177" y="219" class="mono copy">disabled</text>
+    <text x="360" y="219" class="mono copy muted">locked</text><text x="500" y="219" class="mono copy">false</text>
+    <text x="24" y="255" class="mono copy muted">contract</text><text x="177" y="255" class="mono copy">0x1111…1111</text>
+  </g>
+
+  <g transform="translate(42 568)">
+    <rect width="1516" height="142" rx="15" fill="#192117" stroke="#5d724f"/>
+    <text x="24" y="38" class="mono tag accent">03 / COMPARE</text>
+    <text x="24" y="75" class="mono copy">09:00 → 11:00 UTC</text>
+    <text x="300" y="75" class="mono copy accent">2 source</text><text x="430" y="75" class="mono copy">·</text><text x="457" y="75" class="mono copy accent">1 test</text><text x="552" y="75" class="mono copy">·</text><text x="579" y="75" class="mono copy accent">1 docs</text>
+    <text x="870" y="75" class="mono copy muted">creator tax</text><text x="1018" y="75" class="mono copy warn">1% → 0.5%</text>
+    <text x="24" y="111" class="mono copy muted">modified src/receipts.ts  ·  added src/compare.ts  ·  modified test/receipts.test.ts  ·  modified README.md</text>
+  </g>
+</svg>

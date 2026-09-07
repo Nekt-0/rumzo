@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="470" viewBox="0 0 1600 470" role="img" aria-labelledby="title desc">
+  <title id="title">How RUMZO turns two public inputs into a comparable evidence receipt</title>
+  <desc id="desc">A repository and token contract pass through validation, parallel GitHub and Robinhood Chain reads, one pinned receipt, local storage, comparison and export.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#11150f"/>
+      <stop offset="1" stop-color="#182016"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#79915e"/>
+    </marker>
+    <style>
+      .label{font:600 19px Inter,Segoe UI,sans-serif;fill:#e9eddf}.small{font:15px Inter,Segoe UI,sans-serif;fill:#a9b5a0}.micro{font:700 12px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:1.8px;fill:#c7e887}.mono{font:15px ui-monospace,SFMono-Regular,Consolas,monospace;fill:#d8e2cf}.card{fill:#1b2118;stroke:#506146;stroke-width:2}.line{fill:none;stroke:#79915e;stroke-width:3;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1600" height="470" rx="24" fill="url(#bg)"/>
+  <g opacity=".32" stroke="#36422f"><path d="M40 74H1560M40 396H1560"/><path d="M250 38V432M1350 38V432" stroke-dasharray="3 14"/></g>
+  <text x="60" y="62" class="micro">RUMZO / EVIDENCE PIPELINE</text>
+  <text x="60" y="98" class="small">One explicit inspection. Two read-only sources. One receipt tied to a moment.</text>
+
+  <g transform="translate(60 158)">
+    <rect class="card" width="230" height="190" rx="18"/>
+    <rect x="22" y="22" width="76" height="28" rx="14" fill="#26331f"/><text x="60" y="41" text-anchor="middle" class="micro">INPUT</text>
+    <text x="24" y="88" class="label">Repository</text><text x="24" y="114" class="small">owner / project</text>
+    <path d="M24 135H206" stroke="#36422f"/>
+    <text x="24" y="166" class="label">Token contract</text>
+  </g>
+  <path class="line" d="M292 253H360"/>
+
+  <g transform="translate(364 188)">
+    <rect class="card" width="182" height="130" rx="65"/>
+    <circle cx="48" cy="65" r="20" fill="#c7e887" opacity=".15"/><path d="m38 65 7 7 15-17" fill="none" stroke="#c7e887" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="80" y="60" class="label">Validate</text><text x="80" y="84" class="small">and normalize</text>
+  </g>
+  <path d="M550 253H600M600 253V183M600 253V323M600 183H648M600 323H648" fill="none" stroke="#79915e" stroke-width="3"/>
+
+  <g transform="translate(652 130)">
+    <rect class="card" width="280" height="108" rx="16"/>
+    <rect x="20" y="18" width="38" height="38" rx="9" fill="#c7e887" opacity=".16"/><path d="M31 30h16v14H31zM34 27v3M44 27v3M34 44v4M44 44v4" stroke="#c7e887" stroke-width="2" fill="none"/>
+    <text x="74" y="48" class="label">GitHub at one SHA</text><text x="74" y="76" class="small">tree · manifests · README · commits</text>
+  </g>
+  <g transform="translate(652 268)">
+    <rect class="card" width="280" height="108" rx="16"/>
+    <rect x="20" y="18" width="38" height="38" rx="9" fill="#c7e887" opacity=".16"/><path d="M28 37h22M33 30l-7 7 7 7M45 30l7 7-7 7" stroke="#c7e887" stroke-width="2.5" fill="none"/>
+    <text x="74" y="48" class="label">Chain at one block</text><text x="74" y="76" class="small">metadata · stage · fees · flags</text>
+  </g>
+  <path d="M936 184H972M936 322H972M972 184V253M972 322V253H1017" fill="none" stroke="#79915e" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(1022 153)">
+    <rect width="240" height="200" rx="16" fill="#f3f0e3"/>
+    <path d="M0 191l12 9 12-9 12 9 12-9 12 9 12-9 12 9 12-9 12 9 12-9 12 9 12-9 12 9 12-9 12 9 12-9 12 9 12-9 12 9 12-9V0H0z" fill="#f3f0e3"/>
+    <rect x="22" y="22" width="72" height="24" rx="12" fill="#dce8cb"/><text x="58" y="39" text-anchor="middle" class="micro" fill="#365023">RECEIPT</text>
+    <text x="22" y="82" style="font:600 18px Inter,Segoe UI,sans-serif;fill:#26311e">Pinned evidence</text>
+    <path d="M22 104H218M22 129H190M22 154H205" stroke="#aab59d" stroke-width="2" stroke-dasharray="7 6"/>
+    <circle cx="204" cy="35" r="13" fill="#26311e"/><path d="m198 35 4 4 7-9" fill="none" stroke="#c7e887" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <path class="line" d="M1266 253H1328"/>
+
+  <g transform="translate(1332 147)">
+    <rect class="card" width="210" height="214" rx="18"/>
+    <text x="24" y="45" class="micro">AFTER</text>
+    <text x="24" y="82" class="label">Save locally</text><text x="24" y="108" class="small">atomic JSON snapshot</text>
+    <path d="M24 130H186" stroke="#36422f"/>
+    <text x="24" y="161" class="label">Compare</text><text x="24" y="187" class="small">then export JSON / MD</text>
+  </g>
+  <circle cx="1142" cy="253" r="129" fill="none" stroke="#c7e887" stroke-opacity=".12" stroke-width="2" filter="url(#glow)"/>
+</svg>
