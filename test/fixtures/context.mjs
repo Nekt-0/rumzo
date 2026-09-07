@@ -28,7 +28,7 @@ function githubFixture({ truncated = false, failReadme = false, privateRepo = fa
     [`/repos/owner/repo/git/blobs/${'b'.repeat(40)}`]: { encoding: 'base64', content: Buffer.from(`Token: ${token}`).toString('base64') }
   };
   return { requests, client: new GitHubClient('test-secret', async (url, options) => {
-    assert.equal(new URL(url).origin, 'https://api.github.com'); assert.equal(options.redirect, 'error'); requests.push(url);
+    assert.equal(new URL(url).origin, 'https://api.github.com'); assert.equal(options.redirect, 'manual'); requests.push(url);
     const path = new URL(url).pathname + new URL(url).search;
     if (failReadme && path.includes('/git/blobs/')) return new Response('{}', { status: 429 });
     assert.ok(path in data, path); return new Response(JSON.stringify(data[path]), { status: 200 });

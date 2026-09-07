@@ -14,14 +14,19 @@ test('GitHub client refuses oversized responses before parsing their contents', 
   await assert.rejects(client.get('/repos/demo/receipt-lab'), /10 MB/);
 });
 
-test('GitHub transport refuses redirects and malformed JSON', async () => {
+test('GitHub transport uses manual redirect handling and refuses malformed JSON', async () => {
   const client = new GitHubClient('test-credential', async (url, options) => {
     assert.equal(new URL(url).hostname, 'api.github.com');
-    assert.equal(options.redirect, 'error');
+    assert.equal(options.redirect, 'manual');
     assert.equal(options.headers.Authorization, 'Bearer test-credential');
     return new Response('{incomplete');
   });
   await assert.rejects(client.get('/repos/demo/receipt-lab'), SyntaxError);
+});
+
+test('GitHub transport refuses redirect responses', async () => {
+  const client = new GitHubClient(undefined, async () => new Response(null, { status: 302, headers: { Location: 'https://example.test/' } }));
+  await assert.rejects(client.get('/repos/demo/receipt-lab'), /redirect refused/);
 });
 
 test('default GitHub transport does not bind global fetch to the client instance', async () => {
