@@ -1,4 +1,6 @@
-<p align="center"><img src="assets/avatar.png" width="120" alt="RUMZO, a skeptical pixel raccoon carrying a receipt"></p>
+![RUMZO — Show the receipts. Pixel raccoon on a dark green background](assets/banner.png)
+
+<p align="center"><a href="assets/avatar-background.png"><img src="assets/avatar-background.png" width="120" height="120" alt="RUMZO avatar: a skeptical pixel raccoon with a receipt on a green pixel background"></a></p>
 
 # RUMZO
 
@@ -123,6 +125,8 @@ node --env-file=.env dist/cli.js serve
 Never publish .env or provider credentials. More: [Architecture](docs/ARCHITECTURE.md) · [Methodology](docs/METHODOLOGY.md) · [Testing](docs/TESTING.md) · [Assets](assets/README.md) · [Security](SECURITY.md).
 
 ## Sources and license
+
+Brand files: [wide banner](assets/banner.png) · [square avatar with background](assets/avatar-background.png) · [transparent character](assets/avatar.png).
 
 Protocol reads use the published [pons v2 documentation](https://docs.ponsfamily.com/v2), [pons contract sources](https://github.com/ponsdotdev/ponsfamily), [Robinhood Chain documentation](https://docs.robinhood.com/chain/) and [GitHub REST API](https://docs.github.com/en/rest). RUMZO is independent of these services.
 

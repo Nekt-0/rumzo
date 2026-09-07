@@ -2,7 +2,9 @@
 
 | File | Purpose | Origin |
 | --- | --- | --- |
-| avatar.png | Main character, README and app identity | Original AI-generated illustration |
+| avatar.png | Original transparent character used in the app | Original AI-generated illustration |
+| avatar-background.png | Square avatar for README and profiles, 1254 × 1254 | Original character with an opaque green pixel-art background |
+| banner.png | README header and reusable wide banner, 2172 × 724 | Original 3:1 pixel-art banner matching the avatar |
 | empty-receipts.png | Empty receipt-history state | New illustration based on the original RUMZO character |
 | rumzo-workbench.png | README evidence-workbench illustration | New illustration based on the original RUMZO character |
 | mark.svg | Browser favicon and compact receipt mark | Hand-authored SVG |
@@ -14,6 +16,6 @@
 | screenshots/receipt.png | Two evidence panels | Captured with labelled synthetic demo data |
 | screenshots/comparison.png | File and contract-value differences | Captured with labelled synthetic demo data |
 
-PNG illustrations retain their transparent background. SVG files use the project palette and contain no scripts or external references. Screenshots show actual UI rendering; demo values are illustrative, not on-chain findings.
+The original avatar and empty-history character retain transparency. The square profile avatar, banner and workbench scene have opaque backgrounds. SVG files use the project palette and contain no scripts or external references. Screenshots show actual UI rendering; demo values are illustrative, not on-chain findings.
 
-The generation prompts are documented in [ASSET-PROMPTS.md](../docs/ASSET-PROMPTS.md). A social banner will be designed separately.
+The generation prompts are documented in [ASSET-PROMPTS.md](../docs/ASSET-PROMPTS.md). Use the square avatar for profiles and the wide banner for headers; preserve their proportions.
