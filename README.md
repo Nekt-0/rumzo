@@ -1,6 +1,6 @@
-![RUMZO — Show the receipts. Pixel raccoon on a dark green background](assets/banner.png)
+![RUMZO — GitHub evidence. Robinhood Chain snapshots.](assets/banner.png)
 
-<p align="center"><a href="assets/avatar-background.png"><img src="assets/avatar-background.png" width="120" height="120" alt="RUMZO avatar: a skeptical pixel raccoon with a receipt on a green pixel background"></a></p>
+<p align="center"><a href="assets/avatar-background.png"><img src="assets/avatar-background.png" width="120" height="120" alt="RUMZO avatar: a skeptical pixel raccoon with a receipt on a quiet green background"></a></p>
 
 # RUMZO
 

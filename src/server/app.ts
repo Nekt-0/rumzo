@@ -11,7 +11,7 @@ const staticFiles: Record<string, [string, string]> = {
   '/': ['index.html', 'text/html; charset=utf-8'], '/app.js': ['app.js', 'text/javascript; charset=utf-8'],
   '/style.css': ['style.css', 'text/css; charset=utf-8']
 };
-const assetFiles: Record<string, string> = { 'avatar.png': 'image/png', 'empty-receipts.png': 'image/png', 'receipt.svg': 'image/svg+xml', 'compare.svg': 'image/svg+xml', 'mark.svg': 'image/svg+xml' };
+const assetFiles: Record<string, string> = { 'avatar.png': 'image/png', 'avatar-background.png': 'image/png', 'empty-receipts.png': 'image/png', 'receipt.svg': 'image/svg+xml', 'compare.svg': 'image/svg+xml', 'mark.svg': 'image/svg+xml' };
 function json(res: ServerResponse, status: number, body: unknown) { res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8' }); res.end(JSON.stringify(body)); }
 async function readBody(req: IncomingMessage): Promise<unknown> {
   if (!req.headers['content-type']?.startsWith('application/json')) throw new Error('Send application/json.');

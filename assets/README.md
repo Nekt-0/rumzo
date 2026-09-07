@@ -3,8 +3,8 @@
 | File | Purpose | Origin |
 | --- | --- | --- |
 | avatar.png | Original transparent character used in the app | Original AI-generated illustration |
-| avatar-background.png | Square avatar for README and profiles, 1254 × 1254 | Original character with an opaque green pixel-art background |
-| banner.png | README header and reusable wide banner, 2172 × 724 | Original 3:1 pixel-art banner matching the avatar |
+| avatar-background.png | Square avatar for README, profiles and application hero, 1254 × 1254 | Original character with a simplified opaque green background |
+| banner.png | README header and reusable wide banner, 2172 × 724 | Original 3:1 pixel-art banner with a concise GitHub and Robinhood Chain description |
 | empty-receipts.png | Empty receipt-history state | New illustration based on the original RUMZO character |
 | rumzo-workbench.png | README evidence-workbench illustration | New illustration based on the original RUMZO character |
 | mark.svg | Browser favicon and compact receipt mark | Hand-authored SVG |
