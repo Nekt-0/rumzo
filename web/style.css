@@ -234,6 +234,9 @@ section { scroll-margin-top: 105px; }
 .closing { display: flex; align-items: end; justify-content: space-between; gap: 32px; margin-top: 96px; padding: 42px; border: 1px solid #506044; border-radius: 18px; background: var(--accent); color: #13200c; }
 .closing .eyebrow { color: #435b26; }
 .closing h2 { margin-top: 10px; }
+.founder-note { margin-top: 16px; color: #435b26; font-size: .86rem; }
+.founder-note a { color: #15220d; font-weight: 750; text-decoration-thickness: 1px; }
+.founder-note a:hover { text-decoration-thickness: 2px; }
 .closing-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 9px; }
 .closing .primary-link { border-color: #15220d !important; color: var(--accent) !important; background: #15220d !important; }
 .closing .primary-link:hover { background: #243719 !important; }
