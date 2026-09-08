@@ -165,7 +165,7 @@ function refreshHistory() {
   saved = loadReports(); const root = $('history-list'); root.replaceChildren();
   if (!saved.length) { const empty = el('div', undefined, 'empty-history'); const image = el('img'); image.src = '/assets/empty-receipts.png'; image.alt = ''; image.width = 92; image.height = 92; empty.append(image, el('p', 'No receipts yet. Start an inspection or explore the demo.', 'muted')); root.append(empty); }
   for (const r of saved.slice(0, 12)) {
-    const container = el('div', undefined, 'history-row'); const text = el('div'); text.append(el('p', r.input.repository), el('small', `${time(r.createdAt)} · GitHub ${r.github} / chain ${r.chain}`));
+    const container = el('div', undefined, 'history-row'); const text = el('div'); text.append(el('p', r.input.repository), el('small', `${time(r.createdAt)} · GitHub ${r.github.status} / chain ${r.chain.status}`));
     const button = el('button', 'Open'); button.type = 'button'; button.addEventListener('click', () => { message(''); renderReport(r); }); container.append(text, button); root.append(container);
   }
   renderBaseline();
@@ -187,3 +187,17 @@ $('export-json').addEventListener('click', () => { if (current) download(`rumzo-
 $('export-md').addEventListener('click', () => { if (current) download(`rumzo-${current.id}.md`, toMarkdown(current), 'text/markdown'); });
 $('refresh-history').addEventListener('click', refreshHistory);
 refreshHistory();
+
+const navLinks = [...document.querySelectorAll('.nav-link')];
+const navSections = navLinks.map(anchor => document.querySelector(anchor.getAttribute('href'))).filter(Boolean);
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(entries => {
+    const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (!visible) return;
+    for (const anchor of navLinks) {
+      const currentSection = anchor.getAttribute('href') === `#${visible.target.id}`;
+      if (currentSection) anchor.setAttribute('aria-current', 'true'); else anchor.removeAttribute('aria-current');
+    }
+  }, { rootMargin: '-18% 0px -65% 0px', threshold: [0, .2, .5] });
+  for (const section of navSections) observer.observe(section);
+}

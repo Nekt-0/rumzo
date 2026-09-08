@@ -1,30 +1,167 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Inspect public GitHub evidence and pons v2 token settings on Robinhood Chain. Save receipts in your browser and compare what changed.">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RUMZO inspects public GitHub evidence and pons v2 token settings on Robinhood Chain, then saves comparable receipts in your browser.">
   <title>RUMZO — Show the receipts.</title>
-  <link rel="icon" href="/assets/mark.svg"><link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/assets/mark.svg">
+  <link rel="stylesheet" href="/style.css">
   <script type="module" src="/app.js"></script>
 </head>
 <body>
-<header class="topbar"><a class="brand" href="/" aria-label="RUMZO home"><img src="/assets/avatar.png" width="44" height="44" alt=""><span>rumzo<span class="brand-dot">.</span></span></a><div class="network"><span class="dot"></span>Robinhood Chain<span class="version">v0.2</span></div></header>
-<main>
-  <section class="intro"><div><div class="eyebrow">BUILDER RECEIPTS</div><h1>Big claims.<br>Small raccoon.</h1><p>Inspect GitHub code and token settings on Robinhood Chain.<br> Save receipts in this browser. Compare what changed.</p></div><img class="mascot" src="/assets/avatar-background.png" width="210" height="210" alt="A skeptical pixel raccoon holding a receipt on a quiet green background"></section>
-  <form id="inspect-form" class="scan-form">
-    <div class="fields"><label>Token contract<input id="token" name="token" placeholder="0x… on Robinhood Chain" autocomplete="off" spellcheck="false" required maxlength="42"></label><label>GitHub repository<input id="repository" name="repository" placeholder="owner/repository or GitHub URL" autocomplete="off" spellcheck="false" required maxlength="300"></label><button class="primary" id="scan-button" type="submit">Get receipts <span aria-hidden="true">↗</span></button></div>
-    <div class="examples"><button type="button" id="demo-button">Explore demo</button><span class="muted">Synthetic walkthrough · no network requests to providers</span></div>
-  </form>
+<a class="skip-link" href="#inspect">Skip to inspection</a>
+
+<header class="site-header">
+  <div class="topbar">
+    <a class="brand" href="#top" aria-label="RUMZO home">
+      <img src="/assets/avatar.png" width="44" height="44" alt="">
+      <span>rumzo<span class="brand-dot">.</span></span>
+    </a>
+
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <a class="nav-link" href="#inspect">Inspect</a>
+      <a class="nav-link" href="#workflow">How it works</a>
+      <a class="nav-link" href="#receipts">Receipts</a>
+      <a class="nav-link" href="#faq">FAQ</a>
+    </nav>
+
+    <div class="header-actions">
+      <a class="social-link" href="https://x.com/Nekt_0" target="_blank" rel="noreferrer" aria-label="Follow Nekt_0 on X">X <span aria-hidden="true">↗</span></a>
+      <a class="social-link" href="https://github.com/Nekt-0/rumzo" target="_blank" rel="noreferrer" aria-label="Open RUMZO on GitHub">GitHub <span aria-hidden="true">↗</span></a>
+      <div class="network" title="RUMZO reads Robinhood Chain">
+        <span class="dot"></span><span>Chain 4663</span><span class="version">v0.2</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="intro" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="eyebrow-pulse"></span>BUILDER RECEIPTS · ROBINHOOD CHAIN</div>
+      <h1 id="hero-title">Big claims.<br><span>Small raccoon.</span></h1>
+      <p>Bring a contract and its GitHub repository. RUMZO checks public evidence, pins what it observed, and gives you a receipt you can revisit.</p>
+      <div class="hero-actions">
+        <a class="button primary-link" href="#inspect">Inspect a project <span aria-hidden="true">↓</span></a>
+        <a class="button ghost-link" href="https://github.com/Nekt-0/rumzo" target="_blank" rel="noreferrer">View the source <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="trust-row" aria-label="Product principles">
+        <span><i aria-hidden="true"></i>Read-only</span>
+        <span><i aria-hidden="true"></i>Public evidence</span>
+        <span><i aria-hidden="true"></i>Browser-local history</span>
+      </div>
+    </div>
+
+    <div class="mascot-card" aria-label="RUMZO status card">
+      <div class="mascot-top"><span>RUMZO / 001</span><span class="live"><i></i>LISTENING</span></div>
+      <img class="mascot" src="/assets/avatar-background.png" width="260" height="260" alt="A skeptical pixel raccoon holding a receipt on a quiet green background">
+      <div class="mascot-readout">
+        <div><span>NETWORK</span><strong>Robinhood Chain</strong></div>
+        <div><span>MODE</span><strong>Read-only</strong></div>
+        <div><span>OUTPUT</span><strong>Evidence receipt</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="inspect" class="workspace-section" aria-labelledby="inspect-title">
+    <div class="section-heading">
+      <div><span class="section-number">01</span><div><div class="eyebrow">INSPECT</div><h2 id="inspect-title">One scan. Two public sources.</h2></div></div>
+      <p>RUMZO reads only when you ask. No wallet connection and no signer.</p>
+    </div>
+
+    <form id="inspect-form" class="scan-form">
+      <div class="fields">
+        <label>Token contract<input id="token" name="token" placeholder="0x… on Robinhood Chain" autocomplete="off" spellcheck="false" required maxlength="42"></label>
+        <label>GitHub repository<input id="repository" name="repository" placeholder="owner/repository or GitHub URL" autocomplete="off" spellcheck="false" required maxlength="300"></label>
+        <button class="primary" id="scan-button" type="submit">Get receipts <span aria-hidden="true">↗</span></button>
+      </div>
+      <div class="examples">
+        <button type="button" id="demo-button">Explore demo</button>
+        <span class="muted">Synthetic walkthrough · no provider requests</span>
+      </div>
+    </form>
+  </section>
+
   <p id="status" class="status" role="status" aria-live="polite"></p>
   <div id="error" class="error" role="alert" hidden></div>
+
   <section id="results" hidden aria-label="Inspection result">
     <p id="demo-notice" class="demo-notice" hidden>DEMO · SYNTHETIC DATA — illustrative values, no live inspection.</p>
-    <div class="result-top"><div><div class="eyebrow">YOUR RECEIPT</div><h2 id="result-name"></h2><p id="result-date" class="muted"></p></div><div class="actions"><button id="export-json" type="button">Download JSON</button><button id="export-md" type="button">Markdown</button></div></div>
-    <div class="panels"><article class="receipt"><div class="panel-header"><h3><img class="section-icon" src="/assets/receipt.svg" alt="">Inside the repository</h3><span id="github-status" class="badge"></span></div><div id="github-result"></div></article><article class="receipt"><div class="panel-header"><h3>On-chain settings</h3><span id="chain-status" class="badge"></span></div><div id="chain-result"></div></article></div>
-    <section class="changes" aria-label="Snapshot comparison"><div class="panel-header"><h3><img class="section-icon" src="/assets/compare.svg" alt="">What changed?</h3><label class="baseline-label">Compare with <select id="baseline"><option value="">Choose a saved snapshot</option></select></label></div><div id="comparison"></div></section>
-    <details class="coverage"><summary>Evidence coverage & limitations</summary><ul id="limits"></ul></details>
+    <div class="result-top">
+      <div><div class="eyebrow">YOUR RECEIPT</div><h2 id="result-name"></h2><p id="result-date" class="muted"></p></div>
+      <div class="actions"><button id="export-json" type="button">Download JSON</button><button id="export-md" type="button">Markdown</button></div>
+    </div>
+    <div class="panels">
+      <article class="receipt"><div class="panel-header"><h3><img class="section-icon" src="/assets/receipt.svg" alt="">Inside the repository</h3><span id="github-status" class="badge"></span></div><div id="github-result"></div></article>
+      <article class="receipt"><div class="panel-header"><h3>On-chain settings</h3><span id="chain-status" class="badge"></span></div><div id="chain-result"></div></article>
+    </div>
+    <section class="changes" aria-label="Snapshot comparison">
+      <div class="panel-header"><h3><img class="section-icon" src="/assets/compare.svg" alt="">What changed?</h3><label class="baseline-label">Compare with <select id="baseline"><option value="">Choose a saved snapshot</option></select></label></div>
+      <div id="comparison"></div>
+    </section>
+    <details class="coverage"><summary>Evidence coverage &amp; limitations</summary><ul id="limits"></ul></details>
   </section>
-  <section class="history"><div class="panel-header"><h3>Saved receipts</h3><button id="refresh-history" type="button">Refresh</button></div><div id="history-list"><p class="muted">Your snapshots stay in this browser.</p></div></section>
+
+  <section id="receipts" class="history" aria-labelledby="receipts-title">
+    <div class="section-heading compact-heading">
+      <div><span class="section-number">02</span><div><div class="eyebrow">REVISIT</div><h2 id="receipts-title">Saved receipts</h2></div></div>
+      <p>Stored on this device. Open an earlier read or compare it with the next one.</p>
+    </div>
+    <div class="history-panel">
+      <div class="panel-header"><h3>Local archive</h3><button id="refresh-history" type="button">Refresh</button></div>
+      <div id="history-list"><p class="muted">Your snapshots stay in this browser.</p></div>
+    </div>
+  </section>
+
+  <section id="workflow" class="workflow" aria-labelledby="workflow-title">
+    <div class="section-heading">
+      <div><span class="section-number">03</span><div><div class="eyebrow">THE WORKFLOW</div><h2 id="workflow-title">Receipts, not verdicts.</h2></div></div>
+      <p>RUMZO keeps observations separate from conclusions, so every result can be checked at its source.</p>
+    </div>
+    <div class="steps">
+      <article class="step-card"><span>01 / INPUT</span><h3>Point to the project</h3><p>Paste a Robinhood Chain contract and the public GitHub repository connected to it.</p></article>
+      <article class="step-card"><span>02 / READ</span><h3>Freeze the evidence</h3><p>RUMZO pins the repository revision and reads supported pons v2 settings at a specific block.</p></article>
+      <article class="step-card"><span>03 / COMPARE</span><h3>Come back later</h3><p>Save the receipt locally, then compare a future scan to see what can be proven to have changed.</p></article>
+    </div>
+    <div class="principles">
+      <div class="principles-copy"><div class="eyebrow">WHAT RUMZO DOES</div><h2>It makes public claims easier to verify.</h2><p>Every known value links back to GitHub or the Robinhood Chain explorer. Unknowns stay unknown instead of becoming guesses.</p></div>
+      <ul class="principles-list">
+        <li><span>01</span><div><strong>Pins a revision</strong><small>The receipt records the exact GitHub commit it inspected.</small></div></li>
+        <li><span>02</span><div><strong>Records a block</strong><small>On-chain observations keep their read height and source.</small></div></li>
+        <li><span>03</span><div><strong>Shows coverage</strong><small>Partial provider responses are labeled instead of hidden.</small></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="faq" class="faq" aria-labelledby="faq-title">
+    <div class="section-heading">
+      <div><span class="section-number">04</span><div><div class="eyebrow">FAQ</div><h2 id="faq-title">Questions the raccoon gets a lot.</h2></div></div>
+      <p>Short answers about what RUMZO reads, saves, and intentionally leaves alone.</p>
+    </div>
+    <div class="faq-list">
+      <details open><summary>What does RUMZO inspect?<span aria-hidden="true">+</span></summary><p>It inspects public GitHub repository evidence and supported pons v2 contract settings on Robinhood Chain. The receipt includes direct source links wherever a value is known.</p></details>
+      <details><summary>Does it connect to my wallet or execute trades?<span aria-hidden="true">+</span></summary><p>No. RUMZO is read-only. It has no wallet connection, signer, transaction path, or trade execution.</p></details>
+      <details><summary>Is a receipt a safety score or endorsement?<span aria-hidden="true">+</span></summary><p>No. A receipt records observable evidence and coverage limits. It does not decide whether a project is safe, legitimate, or worth buying.</p></details>
+      <details><summary>Where are my saved receipts stored?<span aria-hidden="true">+</span></summary><p>They stay in this browser on this device. You can also download each receipt as JSON or Markdown.</p></details>
+      <details><summary>Why can some fields be unavailable?<span aria-hidden="true">+</span></summary><p>A repository may be private, a provider may limit requests, or a contract may not expose a supported field. RUMZO labels those gaps rather than treating missing data as proof.</p></details>
+      <details><summary>Can I inspect the code behind RUMZO?<span aria-hidden="true">+</span></summary><p>Yes. RUMZO is open source. Read the implementation, run it locally, or open an issue on GitHub.</p></details>
+    </div>
+  </section>
+
+  <section class="closing" aria-label="RUMZO links">
+    <div><div class="eyebrow">KEEP THE RECEIPT</div><h2>Follow the build.<br>Inspect the source.</h2></div>
+    <div class="closing-actions">
+      <a class="button primary-link" href="https://x.com/Nekt_0" target="_blank" rel="noreferrer">Follow @Nekt_0 on X <span aria-hidden="true">↗</span></a>
+      <a class="button ghost-link" href="https://github.com/Nekt-0/rumzo" target="_blank" rel="noreferrer">RUMZO on GitHub <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
 </main>
-<footer><span>Show the receipts.</span><p>Read-only · public GitHub · pons v2<br>No safety scores. No trade execution. Explicit scans only.</p></footer>
-</body></html>
+
+<footer>
+  <a class="footer-brand" href="#top"><img src="/assets/avatar.png" width="36" height="36" alt=""><span>rumzo<span class="brand-dot">.</span></span></a>
+  <p>Read-only · public GitHub · pons v2 · Robinhood Chain<br>No safety scores. No trade execution. Explicit scans only.</p>
+  <div class="footer-links"><a href="https://x.com/Nekt_0" target="_blank" rel="noreferrer">X ↗</a><a href="https://github.com/Nekt-0/rumzo" target="_blank" rel="noreferrer">GitHub ↗</a><a href="#faq">FAQ ↑</a></div>
+</footer>
+</body>
+</html>
