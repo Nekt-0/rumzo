@@ -6,6 +6,8 @@
 
 **Show the receipts.** A small raccoon with a long paper trail.
 
+[Website](https://rumzo.xyz) · [X / @rumzo_rh](https://x.com/rumzo_rh) · [GitHub](https://github.com/Nekt-0/rumzo)
+
 Paste a token address and a public GitHub repository. RUMZO records the published code, reads the token's pons v2 settings on Robinhood Chain, and shows what changed between your inspections.
 
 ![RUMZO home: token and repository inputs, demo walkthrough, and local receipt history](assets/screenshots/home.png)
@@ -34,7 +36,7 @@ These are screenshots of the running application. The report and comparison use 
 
 ## Try it online
 
-[Open the public RUMZO app](https://rumzo.nikitaguguman.chatgpt.site).
+[Open the public RUMZO app](https://rumzo.xyz).
 
 The hosted app can run the same read-only inspection for any supported public repository and token. Receipts stay in that visitor's browser and can be downloaded as JSON or Markdown. The server keeps no shared receipt database, asks for no wallet connection and has no transaction path.
 
