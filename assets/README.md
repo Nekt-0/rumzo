@@ -12,6 +12,7 @@
 | compare.svg | Comparison section icon | Hand-authored SVG |
 | how-it-works.svg | README data-flow overview | Hand-authored SVG |
 | terminal-demo.svg | README terminal-style synthetic receipt | Hand-authored SVG |
+| social/rumzo-public-evidence.png | 16:9 social card explaining the GitHub + Robinhood Chain receipt flow | Programmatically composed from the project palette and original RUMZO character |
 | screenshots/home.png | Clean application start screen | Captured from the running app |
 | screenshots/receipt.png | Two evidence panels | Captured with labelled synthetic demo data |
 | screenshots/comparison.png | File and contract-value differences | Captured with labelled synthetic demo data |
