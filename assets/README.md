@@ -15,6 +15,7 @@
 | social/rumzo-public-evidence.png | 16:9 social card explaining the GitHub + Robinhood Chain receipt flow | Programmatically composed from the project palette and original RUMZO character |
 | social/rumzo-web-terminal.png | 16:9 terminal-style card for the public web and CLI | Programmatically composed from the project palette and original RUMZO character |
 | social/rumzo-receipt-diff-preview.png | 16:9 social card for the v0.2 receipt-diff roadmap update | Programmatically composed from the project palette and original RUMZO character |
+| social/rumzo-v03-monitoring.png | 16:9 release card for v0.3 watchlists, scheduled checks and alerts | Original AI-generated illustration based on the approved RUMZO character |
 | screenshots/home.png | Clean application start screen | Captured from the running app |
 | screenshots/receipt.png | Two evidence panels | Captured with labelled synthetic demo data |
 | screenshots/comparison.png | File and contract-value differences | Captured with labelled synthetic demo data |
