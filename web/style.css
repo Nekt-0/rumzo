@@ -112,6 +112,8 @@ h3 { font-size: 1.05rem; line-height: 1.25; font-weight: 600; }
 .nav-link:hover, .nav-link[aria-current="true"] { color: var(--ink); }
 .nav-link[aria-current="true"]::after { transform: scaleX(1); }
 .header-actions { display: flex; align-items: center; gap: 6px; }
+.header-ca { margin-right: 4px; padding: 8px 11px; color: var(--accent); font: 700 .76rem/1 ui-monospace, SFMono-Regular, Consolas, monospace; text-decoration: none; white-space: nowrap; }
+.header-ca:hover { color: #e4ffb3; }
 .social-link { min-height: 38px; padding: 8px 10px; border: 1px solid var(--line-soft); border-radius: 8px; color: #c7d2c0; text-decoration: none; font-size: .75rem; white-space: nowrap; }
 .social-link:hover { border-color: #516049; background: #171d15; color: var(--ink); }
 .network { display: flex; align-items: center; gap: 8px; margin-left: 5px; padding-left: 13px; border-left: 1px solid var(--line); color: var(--muted); font-size: .72rem; white-space: nowrap; }
@@ -149,7 +151,7 @@ section { scroll-margin-top: 105px; }
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 26px;
-  margin-top: 34px;
+  margin-top: 28px;
   padding: 18px 22px;
   border: 1px solid rgba(200, 255, 99, .62);
   border-radius: 13px;
@@ -323,7 +325,7 @@ footer p { text-align: center; }
   .mascot { width: 70%; margin-block: 20px; }
   .mascot-readout { grid-template-columns: 1fr 1fr; }
   .mascot-readout div:last-child { grid-column: 1 / -1; border-top: 1px solid var(--line); }
-  .contract-bar { grid-template-columns: 1fr; margin-top: 24px; padding: 17px; }
+  .contract-bar { grid-template-columns: 1fr; margin-top: 18px; padding: 17px; }
   .contract-network { grid-row: 2; }
   .contract-address { grid-column: 1; grid-row: 3; }
   .workspace-section, .history, .workflow, .faq { padding-top: 68px; }
