@@ -26,4 +26,4 @@ Contract changes are reported only when the field was known in both snapshots an
 
 ## Out of scope
 
-Execution verification, contract-bytecode audits, private repositories, automatic source ownership verification, similarity/plagiarism detection, multi-chain coverage, historical fee revenue, transaction accounting, buyback proof, continuous monitoring, and price predictions are not implemented in v0.2.
+Execution verification, contract-bytecode audits, private repositories, automatic source ownership verification, similarity detection, multi-chain coverage, historical fee revenue, transaction accounting, buyback proof and price predictions are not implemented. v0.3 monitoring repeats the existing bounded observations; it does not expand their verification scope.

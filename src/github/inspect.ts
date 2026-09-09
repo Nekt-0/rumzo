@@ -18,7 +18,7 @@ export async function inspectGitHub(repository: string, token: string, client = 
   const result: GitHubSnapshot = { status: 'unavailable', repository: fullName, url: `https://github.com/${fullName}`, observedAt: new Date().toISOString(), warnings: [] };
   try {
     const { data: metadata } = await client.get(base);
-    if (metadata.private) throw new Error('RUMZO v0.2 inspects public repositories only.');
+    if (metadata.private) throw new Error('RUMZO v0.3 inspects public repositories only.');
     result.description = metadata.description || '';
     result.defaultBranch = metadata.default_branch;
     result.archived = Boolean(metadata.archived);

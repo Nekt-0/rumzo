@@ -1,7 +1,7 @@
 export class GitHubClient {
   constructor(private token?: string, private fetcher: typeof fetch = (...args) => fetch(...args)) {}
   async get(path: string): Promise<{ data: any; link: string }> {
-    const headers: Record<string, string> = { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'rumzo/0.2.0' };
+    const headers: Record<string, string> = { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'rumzo/0.3.0' };
     if (this.token) headers.Authorization = `Bearer ${this.token}`;
     const response = await this.fetcher(`https://api.github.com${path}`, { headers, redirect: 'manual', signal: AbortSignal.timeout(20000) });
     if (response.status >= 300 && response.status < 400) throw new Error('GitHub redirect refused.');

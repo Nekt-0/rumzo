@@ -12,6 +12,7 @@ Run pnpm run check for compilation and tests, or pnpm run test:coverage after bu
 | comparison.test.mjs | File changes, missing coverage, chronology and contract-value comparisons |
 | markdown.test.mjs | Export structure and escaping untrusted metadata |
 | storage.test.mjs | Round trips, invalid IDs and damaged-file isolation |
+| monitoring.test.mjs | Persistent watches, due schedules, receipt comparison and Telegram change alerts |
 | server.test.mjs | Scan/save/export/compare HTTP flow, Host and Origin validation |
 | demo.test.mjs | Deterministic walkthrough, live-data isolation, exports and static-asset allowlist |
 | cli.test.mjs | Help, malformed options and invalid command handling |

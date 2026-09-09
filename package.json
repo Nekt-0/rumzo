@@ -1,6 +1,6 @@
 {
   "name": "rumzo",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "A curious raccoon bringing receipts on builder tokens. Public GitHub evidence and Robinhood Chain snapshots.",
   "type": "module",

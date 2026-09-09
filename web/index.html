@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="RUMZO inspects public GitHub evidence and pons v2 token settings on Robinhood Chain, then saves comparable receipts in your browser.">
+  <meta name="description" content="RUMZO monitors public GitHub evidence and pons v2 token settings on Robinhood Chain, then records changes as comparable receipts.">
   <title>RUMZO — Show the receipts.</title>
   <link rel="icon" href="/assets/mark.svg">
-  <link rel="stylesheet" href="/style.css?v=4">
-  <script type="module" src="/app.js?v=4"></script>
+  <link rel="stylesheet" href="/style.css?v=5">
+  <script type="module" src="/app.js?v=5"></script>
 </head>
 <body>
 <a class="skip-link" href="#inspect">Skip to inspection</a>
@@ -21,6 +21,7 @@
 
     <nav class="primary-nav" aria-label="Primary navigation">
       <a class="nav-link" href="#inspect">Inspect</a>
+      <a class="nav-link" href="#monitor">Monitor</a>
       <a class="nav-link" href="#workflow">How it works</a>
       <a class="nav-link" href="#receipts">Receipts</a>
       <a class="nav-link" href="#faq">FAQ</a>
@@ -31,7 +32,7 @@
       <a class="social-link" href="https://x.com/rumzo_rh" target="_blank" rel="noreferrer" aria-label="Follow RUMZO on X">X <span aria-hidden="true">↗</span></a>
       <a class="social-link" href="https://github.com/Nekt-0/rumzo" target="_blank" rel="noreferrer" aria-label="Open RUMZO on GitHub">GitHub <span aria-hidden="true">↗</span></a>
       <div class="network" title="RUMZO reads Robinhood Chain">
-        <span class="dot"></span><span>Chain 4663</span><span class="version">v0.2</span>
+        <span class="dot"></span><span>Chain 4663</span><span class="version">v0.3</span>
       </div>
     </div>
   </div>
@@ -46,9 +47,9 @@
 
   <section class="intro" aria-labelledby="hero-title">
     <div class="hero-copy">
-      <div class="eyebrow"><span class="eyebrow-pulse"></span>BUILDER RECEIPTS · ROBINHOOD CHAIN</div>
+      <div class="eyebrow"><span class="eyebrow-pulse"></span>V0.3 MONITORING · ROBINHOOD CHAIN</div>
       <h1 id="hero-title">Big claims.<br><span>Small raccoon.</span></h1>
-      <p>Bring a contract and its GitHub repository. RUMZO checks public evidence, pins what it observed, and gives you a receipt you can revisit.</p>
+      <p>Bring a contract and its GitHub repository. RUMZO pins the first receipt, watches both sources, and records the next meaningful change.</p>
       <div class="hero-actions">
         <a class="button primary-link" href="#inspect">Inspect a project <span aria-hidden="true">↓</span></a>
         <a class="button ghost-link" href="https://github.com/Nekt-0/rumzo" target="_blank" rel="noreferrer">View the source <span aria-hidden="true">↗</span></a>
@@ -56,17 +57,17 @@
       <div class="trust-row" aria-label="Product principles">
         <span><i aria-hidden="true"></i>Read-only</span>
         <span><i aria-hidden="true"></i>Public evidence</span>
-        <span><i aria-hidden="true"></i>Browser-local history</span>
+        <span><i aria-hidden="true"></i>Persistent watchlists</span>
       </div>
     </div>
 
     <div class="mascot-card" aria-label="RUMZO status card">
-      <div class="mascot-top"><span>RUMZO / 001</span><span class="live"><i></i>LISTENING</span></div>
+      <div class="mascot-top"><span>RUMZO / 003</span><span class="live"><i></i>MONITORING</span></div>
       <img class="mascot" src="/assets/avatar-background.png" width="260" height="260" alt="A skeptical pixel raccoon holding a receipt on a quiet green background">
       <div class="mascot-readout">
         <div><span>NETWORK</span><strong>Robinhood Chain</strong></div>
         <div><span>MODE</span><strong>Read-only</strong></div>
-        <div><span>OUTPUT</span><strong>Evidence receipt</strong></div>
+        <div><span>OUTPUT</span><strong>Change timeline</strong></div>
       </div>
     </div>
   </section>
@@ -110,9 +111,43 @@
     <details class="coverage"><summary>Evidence coverage &amp; limitations</summary><ul id="limits"></ul></details>
   </section>
 
+  <section id="monitor" class="monitor-section" aria-labelledby="monitor-title">
+    <div class="section-heading">
+      <div><span class="section-number">02</span><div><div class="eyebrow">V0.3 · MONITORING</div><h2 id="monitor-title">Keep watch after the first receipt.</h2></div></div>
+      <p>Your watchlist persists on this device. Scheduled checks run while this page is open; the local runner can stay on continuously.</p>
+    </div>
+
+    <div class="monitor-grid">
+      <div class="monitor-console">
+        <div class="monitor-console-top"><div><span class="eyebrow-pulse"></span><strong>WATCHLIST</strong></div><span id="watch-count">0 ACTIVE</span></div>
+        <form id="watch-form" class="watch-form">
+          <label>Token contract<input id="watch-token" name="watch-token" placeholder="0x… on Robinhood Chain" autocomplete="off" spellcheck="false" required maxlength="42"></label>
+          <label>GitHub repository<input id="watch-repository" name="watch-repository" placeholder="owner/repository or GitHub URL" autocomplete="off" spellcheck="false" required maxlength="300"></label>
+          <label>Check every<select id="watch-interval" name="watch-interval"><option value="5">5 minutes</option><option value="15" selected>15 minutes</option><option value="30">30 minutes</option><option value="60">1 hour</option><option value="360">6 hours</option><option value="1440">24 hours</option></select></label>
+          <button class="primary" id="watch-add" type="submit">Add &amp; check now <span aria-hidden="true">↗</span></button>
+        </form>
+        <p id="monitor-status" class="monitor-status" role="status" aria-live="polite">Ready for the first watch.</p>
+        <div id="watch-list" class="watch-list"></div>
+      </div>
+
+      <aside class="timeline-panel" aria-labelledby="timeline-title">
+        <div class="timeline-head"><div><div class="eyebrow">CHANGE ALERTS</div><h3 id="timeline-title">Receipt timeline</h3></div><button id="clear-alerts" type="button">Clear</button></div>
+        <div class="timeline-legend" aria-label="Alert states"><span><i class="state-change"></i>Changed</span><span><i class="state-stable"></i>Stable</span><span><i class="state-unknown"></i>Coverage</span></div>
+        <div id="alert-list" class="alert-list"></div>
+      </aside>
+    </div>
+
+    <div class="telegram-strip">
+      <div class="telegram-mark" aria-hidden="true">↗</div>
+      <div><div class="eyebrow">TELEGRAM NOTIFICATIONS</div><h3>Let the local runner stay awake.</h3><p>Configure a bot token and chat ID, then RUMZO sends only established code, contract, coverage, or failure alerts.</p></div>
+      <code>node --env-file=.env dist/cli.js watch start</code>
+      <a class="button ghost-link" href="https://github.com/Nekt-0/rumzo#continuous-monitoring" target="_blank" rel="noreferrer">Setup guide ↗</a>
+    </div>
+  </section>
+
   <section id="receipts" class="history" aria-labelledby="receipts-title">
     <div class="section-heading compact-heading">
-      <div><span class="section-number">02</span><div><div class="eyebrow">REVISIT</div><h2 id="receipts-title">Saved receipts</h2></div></div>
+      <div><span class="section-number">03</span><div><div class="eyebrow">REVISIT</div><h2 id="receipts-title">Saved receipts</h2></div></div>
       <p>Stored on this device. Open an earlier read or compare it with the next one.</p>
     </div>
     <div class="history-panel">
@@ -123,13 +158,13 @@
 
   <section id="workflow" class="workflow" aria-labelledby="workflow-title">
     <div class="section-heading">
-      <div><span class="section-number">03</span><div><div class="eyebrow">THE WORKFLOW</div><h2 id="workflow-title">Receipts, not verdicts.</h2></div></div>
+      <div><span class="section-number">04</span><div><div class="eyebrow">THE WORKFLOW</div><h2 id="workflow-title">Receipts, not verdicts.</h2></div></div>
       <p>RUMZO keeps observations separate from conclusions, so every result can be checked at its source.</p>
     </div>
     <div class="steps">
       <article class="step-card"><span>01 / INPUT</span><h3>Point to the project</h3><p>Paste a Robinhood Chain contract and the public GitHub repository connected to it.</p></article>
       <article class="step-card"><span>02 / READ</span><h3>Freeze the evidence</h3><p>RUMZO pins the repository revision and reads supported pons v2 settings at a specific block.</p></article>
-      <article class="step-card"><span>03 / COMPARE</span><h3>Come back later</h3><p>Save the receipt locally, then compare a future scan to see what can be proven to have changed.</p></article>
+      <article class="step-card"><span>03 / MONITOR</span><h3>Let RUMZO come back</h3><p>Keep the project on a schedule. Each new receipt becomes a dated event with code, contract, stable, or coverage state.</p></article>
     </div>
     <div class="principles">
       <div class="principles-copy"><div class="eyebrow">WHAT RUMZO DOES</div><h2>It makes public claims easier to verify.</h2><p>Every known value links back to GitHub or the Robinhood Chain explorer. Unknowns stay unknown instead of becoming guesses.</p></div>
@@ -143,7 +178,7 @@
 
   <section id="faq" class="faq" aria-labelledby="faq-title">
     <div class="section-heading">
-      <div><span class="section-number">04</span><div><div class="eyebrow">FAQ</div><h2 id="faq-title">Questions the raccoon gets a lot.</h2></div></div>
+      <div><span class="section-number">05</span><div><div class="eyebrow">FAQ</div><h2 id="faq-title">Questions the raccoon gets a lot.</h2></div></div>
       <p>Short answers about what RUMZO reads, saves, and intentionally leaves alone.</p>
     </div>
     <div class="faq-list">
@@ -151,6 +186,7 @@
       <details><summary>Does it connect to my wallet or execute trades?<span aria-hidden="true">+</span></summary><p>No. RUMZO is read-only. It has no wallet connection, signer, transaction path, or trade execution.</p></details>
       <details><summary>Is a receipt a safety score or endorsement?<span aria-hidden="true">+</span></summary><p>No. A receipt records observable evidence and coverage limits. It does not decide whether a project is safe, legitimate, or worth buying.</p></details>
       <details><summary>Where are my saved receipts stored?<span aria-hidden="true">+</span></summary><p>They stay in this browser on this device. You can also download each receipt as JSON or Markdown.</p></details>
+      <details><summary>Does monitoring continue after I close the site?<span aria-hidden="true">+</span></summary><p>The website checks due projects while the page is open. For unattended schedules and Telegram alerts, run the open-source local monitor on a computer or server you control.</p></details>
       <details><summary>Why can some fields be unavailable?<span aria-hidden="true">+</span></summary><p>A repository may be private, a provider may limit requests, or a contract may not expose a supported field. RUMZO labels those gaps rather than treating missing data as proof.</p></details>
       <details><summary>Can I inspect the code behind RUMZO?<span aria-hidden="true">+</span></summary><p>Yes. RUMZO is open source. Read the implementation, run it locally, or open an issue on GitHub.</p></details>
     </div>
@@ -171,7 +207,7 @@
 
 <footer>
   <a class="footer-brand" href="#top"><img src="/assets/avatar.png" width="36" height="36" alt=""><span>rumzo<span class="brand-dot">.</span></span></a>
-  <p>Read-only · public GitHub · pons v2 · Robinhood Chain<br>No safety scores. No trade execution. Explicit scans only.</p>
+  <p>Read-only · public GitHub · pons v2 · Robinhood Chain<br>Persistent watchlists. No safety scores. No trade execution.</p>
   <div class="footer-links"><a href="https://x.com/rumzo_rh" target="_blank" rel="noreferrer">X ↗</a><a href="https://github.com/Nekt-0/rumzo" target="_blank" rel="noreferrer">GitHub ↗</a><a href="#faq">FAQ ↑</a></div>
 </footer>
 </body>

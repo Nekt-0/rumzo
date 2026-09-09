@@ -6,7 +6,10 @@ assert.equal(typeof worker?.fetch, 'function');
 const assets = { fetch: async request => new Response(`asset:${new URL(request.url).pathname}`, { headers: { 'Content-Type': 'text/plain' } }) };
 const health = await worker.fetch(new Request('https://rumzo.test/api/health'), { ASSETS: assets });
 assert.equal(health.status, 200);
-assert.equal((await health.json()).storage, 'browser');
+const healthBody = await health.json();
+assert.equal(healthBody.version, '0.3.0');
+assert.equal(healthBody.storage, 'browser');
+assert.equal(healthBody.monitoring, 'while-open');
 
 const demo = await worker.fetch(new Request('https://rumzo.test/api/demo'), { ASSETS: assets });
 assert.equal(demo.status, 200);

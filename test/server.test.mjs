@@ -19,6 +19,7 @@ test('local HTTP flow scans, saves, exports, compares and rejects cross-origin o
     const second = await (await post({ token, repository: 'owner/repo' })).json(); assert.equal(second.comparison.before, first.report.id);
     const list = await (await fetch(`${base}/api/reports`)).json(); assert.equal(list.length, 2);
     const markdown = await fetch(`${base}/api/reports/${first.report.id}.md`); assert.match(markdown.headers.get('content-type'), /markdown/); assert.match(await markdown.text(), /RUMZO/);
+    const health = await (await fetch(`${base}/api/health`)).json(); assert.equal(health.version, '0.3.0'); assert.equal(health.monitoring, 'local-runner');
     const home = await fetch(base); assert.equal(home.status, 200); assert.match(home.headers.get('content-security-policy'), /frame-ancestors 'none'/);
     const badHost = await new Promise((resolve, reject) => { const req = request(`${base}/api/health`, { headers: { Host: 'evil.test' } }, res => { res.resume(); resolve(res.statusCode); }); req.on('error', reject); req.end(); }); assert.equal(badHost, 403);
   } finally { await new Promise(resolve => server.close(resolve)); await cleanup(directory); }

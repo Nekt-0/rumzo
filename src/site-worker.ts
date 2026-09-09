@@ -40,7 +40,7 @@ export default {
   async fetch(request: Request, env: Environment): Promise<Response> {
     const url = new URL(request.url);
     try {
-      if (request.method === 'GET' && url.pathname === '/api/health') return json({ name: 'rumzo', version: '0.2.0', chainId: 4663, storage: 'browser' });
+      if (request.method === 'GET' && url.pathname === '/api/health') return json({ name: 'rumzo', version: '0.3.0', chainId: 4663, storage: 'browser', monitoring: 'while-open' });
       if (request.method === 'GET' && url.pathname === '/api/demo') return json(demoSession());
       if (request.method === 'GET' && url.pathname === '/api/demo.md') {
         return response(toMarkdown(demoSession().report), 200, { 'Content-Type': 'text/markdown; charset=utf-8', 'Content-Disposition': 'attachment; filename="rumzo-demo.md"', 'Cache-Control': 'no-store' });

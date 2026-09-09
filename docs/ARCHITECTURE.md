@@ -9,6 +9,10 @@ flowchart LR
   Chain --> Receipt
   Receipt --> Store[Local snapshot store]
   Store --> Diff[Snapshot comparison]
+  Watch[Persistent watchlist] --> Scheduler[Due-check scheduler]
+  Scheduler --> Input
+  Diff --> Timeline[Monitoring event timeline]
+  Timeline --> Telegram[Optional local Telegram alert]
   Receipt --> Export[JSON / Markdown]
   Demo[Synthetic demo session] --> Renderer[Browser renderer]
   Receipt --> Renderer
@@ -26,11 +30,13 @@ src/reports/inspect.ts runs both providers and records observation time. A faile
 
 src/storage/snapshots.ts stores each live receipt as a local JSON file through a temporary write and rename. IDs are validated before constructing paths. A malformed file is skipped during listing; it must not hide all the other receipts.
 
+src/monitoring stores watchlist state atomically, runs due inspections one at a time, compares each result with the previous receipt and classifies the event. Telegram credentials are optional local environment values. Baseline and unchanged events do not send messages.
+
 ## HTTP and browser
 
 src/server/app.ts binds only to loopback, verifies Host and Origin, limits request bodies and concurrent inspections, and serves a fixed set of static files. web/app.js creates text nodes for provider strings. Credentials remain on the server; browser requests use same-origin routes.
 
-The application serves its PNG illustrations and SVG icons from an explicit asset allowlist. README diagrams and documentation screenshots remain repository assets; they are not arbitrary files exposed by the HTTP server.
+The hosted page keeps watchlists, events and receipts in browser storage. Its scheduler checks due entries while the page is open. The local CLI runner provides unattended scheduling. The application serves its PNG illustrations and SVG icons from an explicit asset allowlist. README diagrams and documentation screenshots remain repository assets; they are not arbitrary files exposed by the HTTP server.
 
 ## Demo boundary
 

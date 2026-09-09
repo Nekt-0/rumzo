@@ -1,6 +1,9 @@
 const $ = id => document.getElementById(id);
-let current = null, saved = [], demo = null;
+let current = null, saved = [], demo = null, watches = [], alerts = [];
 const STORAGE_KEY = 'rumzo-receipts-v1';
+const WATCH_KEY = 'rumzo-watchlist-v1';
+const ALERT_KEY = 'rumzo-monitor-events-v1';
+const monitoring = new Set();
 const el = (tag, text, className) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (className) n.className = className; return n; };
 function link(label, href) { if (current?.demo) return el('span', label); const a = el('a', label); a.href = href; a.target = '_blank'; a.rel = 'noreferrer'; return a; }
 function row(label, value, source, mono = false) {
@@ -25,6 +28,32 @@ function saveReport(report) {
   }
   return false;
 }
+function loadArray(key, limit) {
+  try { const value = JSON.parse(localStorage.getItem(key) || '[]'); return Array.isArray(value) ? value.slice(0, limit) : []; }
+  catch { return []; }
+}
+function saveArray(key, value, limit) {
+  const copy = value.slice(0, limit);
+  while (copy.length) {
+    try { localStorage.setItem(key, JSON.stringify(copy)); return copy; }
+    catch { copy.pop(); }
+  }
+  try { localStorage.setItem(key, '[]'); } catch { /* Storage may be unavailable. */ }
+  return [];
+}
+function normalizedRepository(value) {
+  const input = String(value || '').trim().replace(/\/+$/, '');
+  const match = /^(?:https:\/\/github\.com\/)?([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+)$/.exec(input);
+  if (!match || match[1].includes('..')) throw new Error('Use owner/repository or a public github.com repository URL.');
+  return match[1];
+}
+function normalizedToken(value) {
+  const input = String(value || '').trim();
+  if (!/^0x[0-9a-fA-F]{40}$/.test(input)) throw new Error('Use a 42-character 0x token address.');
+  return input;
+}
+function saveWatches() { watches = saveArray(WATCH_KEY, watches, 24); }
+function saveAlerts() { alerts = saveArray(ALERT_KEY, alerts, 100); }
 function compareReports(before, after) {
   if (!before || !after || before.schemaVersion !== 1 || after.schemaVersion !== 1) throw new Error('Unsupported report schema.');
   if (Boolean(before.demo) !== Boolean(after.demo)) throw new Error('Demo data cannot be compared with live evidence.');
@@ -170,6 +199,84 @@ function refreshHistory() {
   }
   renderBaseline();
 }
+const eventState = type => type === 'unchanged' || type === 'baseline' ? 'stable' : type === 'coverage-change' ? 'coverage' : type === 'error' ? 'error' : 'change';
+const intervalLabel = minutes => minutes < 60 ? `${minutes}m` : minutes === 60 ? '1h' : minutes === 360 ? '6h' : '24h';
+function eventFor(watch, report, comparison) {
+  let type = 'baseline', summary = 'Baseline receipt captured. Future checks will compare against it.';
+  if (comparison) {
+    const code = comparison.code.changed.length, contract = comparison.chain.length;
+    if (code && contract) { type = 'code-and-contract-change'; summary = `${code} repository file change${code === 1 ? '' : 's'} and ${contract} contract field change${contract === 1 ? '' : 's'} established.`; }
+    else if (code) { type = 'code-change'; summary = `${code} repository file change${code === 1 ? '' : 's'} established. Known contract values stayed stable.`; }
+    else if (contract) { type = 'contract-change'; summary = `${contract} contract field change${contract === 1 ? '' : 's'} established. No repository file change was established.`; }
+    else if (comparison.warnings.length || comparison.code.status !== 'complete') { type = 'coverage-change'; summary = 'No value change was established, but evidence coverage or availability changed.'; }
+    else { type = 'unchanged'; summary = 'No repository or known contract value change was established.'; }
+  }
+  return { id: crypto.randomUUID(), watchId: watch.id, repository: watch.repository, token: watch.token, reportId: report.id, previousReportId: comparison?.before, createdAt: report.createdAt, type, summary };
+}
+function renderAlerts() {
+  const root = $('alert-list'); root.replaceChildren();
+  if (!alerts.length) { root.append(el('p', 'No monitoring events yet. Add a project to capture its baseline.', 'alert-empty')); return; }
+  for (const event of alerts.slice(0, 40)) {
+    const item = el('article', undefined, 'alert-item'); item.dataset.state = eventState(event.type);
+    const body = el('div'); body.append(el('p', event.type.replaceAll('-', ' '), 'alert-type'), el('p', event.repository || 'Watched project', 'watch-meta'), el('p', event.summary, 'alert-summary'), el('time', time(event.createdAt), 'alert-time'));
+    item.append(el('i', undefined, 'alert-dot'), body); root.append(item);
+  }
+}
+function renderWatches() {
+  const root = $('watch-list'); root.replaceChildren();
+  $('watch-count').textContent = `${watches.filter(watch => watch.enabled).length} ACTIVE`;
+  if (!watches.length) { root.append(el('p', 'The watchlist is empty. Add a contract and repository above.', 'watch-empty')); return; }
+  for (const watch of watches) {
+    const container = el('article', undefined, `watch-row${watch.enabled ? '' : ' paused'}`);
+    const copy = el('div'); const title = el('p', undefined, 'watch-title'); title.append(el('i'), watch.repository);
+    copy.append(title, el('p', `${watch.token.slice(0, 8)}…${watch.token.slice(-6)} · every ${intervalLabel(watch.intervalMinutes)}`, 'watch-meta'));
+    const next = watch.enabled ? `Next check ${time(watch.nextRunAt)}` : 'Schedule paused';
+    copy.append(el('p', `${watch.lastEvent ? watch.lastEvent.replaceAll('-', ' ') + ' · ' : ''}${next}`, 'watch-next'));
+    const actions = el('div', undefined, 'watch-actions');
+    const run = el('button', monitoring.has(watch.id) ? 'Checking…' : 'Check now'); run.type = 'button'; run.disabled = monitoring.has(watch.id); run.addEventListener('click', () => void runWatch(watch.id, true));
+    const toggle = el('button', watch.enabled ? 'Pause' : 'Resume'); toggle.type = 'button'; toggle.addEventListener('click', () => { watch.enabled = !watch.enabled; if (watch.enabled) watch.nextRunAt = new Date().toISOString(); saveWatches(); renderWatches(); });
+    const remove = el('button', 'Remove', 'remove-watch'); remove.type = 'button'; remove.addEventListener('click', () => { watches = watches.filter(item => item.id !== watch.id); alerts = alerts.filter(item => item.watchId !== watch.id); saveWatches(); saveAlerts(); renderWatches(); renderAlerts(); $('monitor-status').textContent = 'Watch removed. Saved receipts remain in your browser.'; });
+    actions.append(run, toggle, remove); container.append(copy, actions); root.append(container);
+  }
+}
+async function runWatch(id, reveal = false) {
+  const watch = watches.find(item => item.id === id);
+  if (!watch || monitoring.has(id)) return;
+  monitoring.add(id); renderWatches(); $('monitor-status').textContent = `Reading ${watch.repository} and Robinhood Chain…`;
+  try {
+    const previous = saved.find(report => report.input.token.toLowerCase() === watch.token.toLowerCase() && report.input.repository.toLowerCase() === watch.repository.toLowerCase());
+    const { report } = await api('/api/inspect', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: watch.token, repository: watch.repository }) });
+    const comparison = previous ? compareReports(previous, report) : null;
+    const stored = saveReport(report); refreshHistory();
+    const event = eventFor(watch, report, comparison); alerts.unshift(event); saveAlerts();
+    watch.lastRunAt = report.createdAt; watch.lastReportId = report.id; watch.lastEvent = event.type; watch.lastError = '';
+    watch.nextRunAt = new Date(Date.now() + watch.intervalMinutes * 60_000).toISOString(); saveWatches();
+    $('monitor-status').textContent = `${event.summary}${stored ? '' : ' Receipt storage is full; export reports you need to keep.'}`;
+    renderAlerts();
+    if (reveal) { renderReport(report, comparison); $('results').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  } catch (error) {
+    const summary = error.name === 'TimeoutError' ? 'The scheduled check timed out.' : error.message;
+    const event = { id: crypto.randomUUID(), watchId: watch.id, repository: watch.repository, token: watch.token, createdAt: new Date().toISOString(), type: 'error', summary };
+    alerts.unshift(event); saveAlerts(); watch.lastRunAt = event.createdAt; watch.lastEvent = 'error'; watch.lastError = summary; watch.nextRunAt = new Date(Date.now() + watch.intervalMinutes * 60_000).toISOString(); saveWatches();
+    $('monitor-status').textContent = `${watch.repository}: ${summary}`; renderAlerts();
+  } finally { monitoring.delete(id); renderWatches(); }
+}
+async function runDueWatches() {
+  const due = watches.filter(watch => watch.enabled && Date.parse(watch.nextRunAt) <= Date.now());
+  for (const watch of due) await runWatch(watch.id, false);
+}
+$('watch-form').addEventListener('submit', async event => {
+  event.preventDefault(); message('');
+  try {
+    const token = normalizedToken($('watch-token').value), repository = normalizedRepository($('watch-repository').value), intervalMinutes = Number($('watch-interval').value);
+    if (watches.some(watch => watch.token.toLowerCase() === token.toLowerCase() && watch.repository.toLowerCase() === repository.toLowerCase())) throw new Error('This project is already on your watchlist.');
+    const now = new Date().toISOString(); const watch = { id: crypto.randomUUID(), token, repository, intervalMinutes, enabled: true, createdAt: now, nextRunAt: now };
+    watches.unshift(watch); saveWatches(); renderWatches(); await runWatch(watch.id, false);
+  } catch (error) { $('monitor-status').textContent = error.message; }
+});
+$('clear-alerts').addEventListener('click', () => { alerts = []; saveAlerts(); renderAlerts(); $('monitor-status').textContent = 'Monitoring timeline cleared. Saved receipts remain available.'; });
+$('token').addEventListener('change', () => { if (!$('watch-token').value) $('watch-token').value = $('token').value; });
+$('repository').addEventListener('change', () => { if (!$('watch-repository').value) $('watch-repository').value = $('repository').value; });
 $('demo-button').addEventListener('click', async () => { try { message(''); demo = await api('/api/demo'); renderReport(demo.report, demo.comparison); $('status').textContent = 'Demo loaded. All displayed values are synthetic; your saved receipts are unchanged.'; $('results').scrollIntoView({ behavior: 'instant', block: 'start' }); } catch (error) { message(error.message); } });
 $('inspect-form').addEventListener('submit', async event => {
   event.preventDefault(); message(''); const button = $('scan-button'); button.disabled = true; button.textContent = 'Reading sources…'; $('status').textContent = 'Reading GitHub and Robinhood Chain. A scan can take up to a minute.';
@@ -187,6 +294,11 @@ $('export-json').addEventListener('click', () => { if (current) download(`rumzo-
 $('export-md').addEventListener('click', () => { if (current) download(`rumzo-${current.id}.md`, toMarkdown(current), 'text/markdown'); });
 $('refresh-history').addEventListener('click', refreshHistory);
 refreshHistory();
+watches = loadArray(WATCH_KEY, 24).filter(watch => watch?.id && watch?.token && watch?.repository && [5, 15, 30, 60, 360, 1440].includes(watch.intervalMinutes));
+alerts = loadArray(ALERT_KEY, 100).filter(event => event?.id && event?.watchId && event?.type);
+renderWatches(); renderAlerts();
+void runDueWatches();
+setInterval(() => void runDueWatches(), 30_000);
 
 const navLinks = [...document.querySelectorAll('.nav-link')];
 const navSections = navLinks.map(anchor => document.querySelector(anchor.getAttribute('href'))).filter(Boolean);

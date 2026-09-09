@@ -18,8 +18,8 @@ export async function inspect(input: unknown, options: InspectOptions = {}): Pro
   return { schemaVersion: 1, id: crypto.randomUUID(), createdAt: new Date().toISOString(), input: normalized, github, chain, limitations: [
     'Read-only evidence snapshot, not a security audit or a buy/sell recommendation.',
     'Repository files are inspected as data. No repository code, installation scripts, agents or tests are executed.',
-    'No ownership verification, profit score, fee-income attribution or automatic buyback tracking in v0.2.',
+    'No ownership verification, profit score, fee-income attribution or automatic buyback tracking.',
     'Git dates can be imported or rewritten. Snapshot observation time is separate from commit time.',
-    'Local snapshots cover explicit scans only; there is no background monitoring.'
+    'Browser schedules run while the page is open. Unattended monitoring requires the local v0.3 monitor runner.'
   ] };
 }

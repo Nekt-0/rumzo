@@ -35,4 +35,29 @@ export type Comparison = {
   chain: { field: string; before: Fact<string | number | boolean>; after: Fact<string | number | boolean> }[];
   warnings: string[];
 };
+export type Watch = {
+  id: string;
+  token: string;
+  repository: string;
+  intervalMinutes: number;
+  enabled: boolean;
+  createdAt: string;
+  nextRunAt: string;
+  lastRunAt?: string;
+  lastReportId?: string;
+  lastEvent?: MonitorEventType;
+  lastError?: string;
+};
+export type MonitorEventType = 'baseline' | 'code-change' | 'contract-change' | 'code-and-contract-change' | 'coverage-change' | 'unchanged' | 'error';
+export type MonitorEvent = {
+  id: string;
+  watchId: string;
+  createdAt: string;
+  type: MonitorEventType;
+  summary: string;
+  reportId?: string;
+  previousReportId?: string;
+  comparison?: Comparison;
+};
+export type MonitoringState = { schemaVersion: 1; watches: Watch[]; events: MonitorEvent[] };
 export const emptyCounts = (): Counts => ({ source: 0, tests: 0, docs: 0, config: 0, generated: 0, other: 0 });

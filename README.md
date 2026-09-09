@@ -8,7 +8,7 @@
 
 [Website](https://rumzo.xyz) · [X / @rumzo_rh](https://x.com/rumzo_rh) · [GitHub](https://github.com/Nekt-0/rumzo)
 
-Paste a token address and a public GitHub repository. RUMZO records the published code, reads the token's pons v2 settings on Robinhood Chain, and shows what changed between your inspections.
+Paste a token address and a public GitHub repository. RUMZO records the published code, reads the token's pons v2 settings on Robinhood Chain, and can keep both sources on a persistent schedule.
 
 ![RUMZO home: token and repository inputs, demo walkthrough, and local receipt history](assets/screenshots/home.png)
 
@@ -38,7 +38,7 @@ These are screenshots of the running application. The report and comparison use 
 
 [Open the public RUMZO app](https://rumzo.xyz).
 
-The hosted app can run the same read-only inspection for any supported public repository and token. Receipts stay in that visitor's browser and can be downloaded as JSON or Markdown. The server keeps no shared receipt database, asks for no wallet connection and has no transaction path.
+The hosted app can run the same read-only inspection for any supported public repository and token. In v0.3, watchlists, receipt timelines and change alerts stay in that visitor's browser. Scheduled checks run while the page is open. The server keeps no shared receipt database, asks for no wallet connection and has no transaction path.
 
 ## Start locally
 
@@ -76,10 +76,33 @@ Replace the placeholders with the public project you want to inspect:
 node dist/cli.js inspect --token <TOKEN_ADDRESS> --repo <OWNER/REPOSITORY>
 node dist/cli.js inspect --token <TOKEN_ADDRESS> --repo <OWNER/REPOSITORY> --format json --output receipt.json
 node dist/cli.js diff --before first.json --after second.json
+node dist/cli.js watch add --token <TOKEN_ADDRESS> --repo <OWNER/REPOSITORY> --every 15
+node dist/cli.js watch list
+node dist/cli.js watch start --poll 60
 node dist/cli.js serve --port 4318
 ~~~
 
 An output filename must not already exist. Inspections also save a local receipt in the .rumzo directory. Exit codes: 0 completed (possibly partial), 1 input/local failure, 2 both upstream inspections unavailable. Read each section's status before using its values.
+
+## Continuous monitoring
+
+RUMZO v0.3 adds a persistent watchlist, scheduled re-inspections, code and contract change events, a receipt timeline and optional Telegram notifications. The browser watchlist is useful while the public site stays open. Use the local runner for an unattended process:
+
+~~~sh
+node dist/cli.js watch add --token <TOKEN_ADDRESS> --repo <OWNER/REPOSITORY> --every 15
+node --env-file=.env dist/cli.js watch start --poll 60
+~~~
+
+Allowed inspection intervals are 5, 15, 30, 60, 360 and 1440 minutes. `--poll` only controls how often the runner checks which projects are due; it does not change their inspection interval. Pause, resume, run or remove a watch with its ID:
+
+~~~sh
+node dist/cli.js watch pause --id <WATCH_ID>
+node dist/cli.js watch resume --id <WATCH_ID>
+node dist/cli.js watch run --id <WATCH_ID>
+node dist/cli.js watch remove --id <WATCH_ID>
+~~~
+
+Telegram alerts are optional. Set `RUMZO_TELEGRAM_BOT_TOKEN` and `RUMZO_TELEGRAM_CHAT_ID` in `.env`. The token stays with the local process and is never written into a receipt or sent to the hosted website. Baseline and unchanged events stay quiet; established code, contract, coverage and failure events can trigger a message.
 
 ## What RUMZO checks
 
@@ -91,6 +114,7 @@ An output filename must not already exist. Inspections also save a local receipt
 | Recent commits | Latest changed files and recent activity | Up to 20 commits; no lifetime count or quality score |
 | Robinhood Chain | Token metadata, launch stage, fee recipient, fees, buyback and locker flags | One recorded block on chain 4663; pons v2 factory only |
 | Comparison | File-content/mode and established contract-value changes | Unknown never silently becomes zero or false |
+| Monitoring | Due watchlist entries, receipt-to-receipt diffs and event classification | Browser schedules require an open page; the local runner must stay running for unattended checks |
 
 No wallet connection or signatures. No inspected repository code is executed. RUMZO does not trade, rate token safety, predict prices, verify ownership or track fee income.
 
@@ -106,6 +130,7 @@ src/
   demo/                 Isolated synthetic walkthrough
   github/               API client, file classification and repository inspection
   reports/              Inspection, comparison and Markdown export
+  monitoring/           Persistent watches, scheduled runs and Telegram alerts
   server/               Loopback HTTP application and static assets
   site-worker.ts        Public read-only API and static-site handoff
   storage/              Atomic local snapshot storage
@@ -125,7 +150,7 @@ pnpm run demo:export    # Regenerate synthetic examples after building
 pnpm run site:check     # Build and verify the hosted Worker bundle
 ~~~
 
-Tests exercise provider failures, pinned reads, incomplete trees, transport limits, comparisons, local HTTP behavior, exports, CLI errors and demo isolation. They use fixtures rather than live provider calls. CI runs on Node 22 and 24; inspect the [latest checks](https://github.com/Nekt-0/rumzo/actions) for the current commit.
+Tests exercise provider failures, pinned reads, incomplete trees, transport limits, comparisons, monitoring schedules, Telegram payloads, local HTTP behavior, exports, CLI errors and demo isolation. They use fixtures rather than live provider calls. CI runs on Node 22 and 24; inspect the [latest checks](https://github.com/Nekt-0/rumzo/actions) for the current commit.
 
 ## Configuration
 
@@ -134,6 +159,8 @@ Tests exercise provider failures, pinned reads, incomplete trees, transport limi
 | GITHUB_TOKEN | Unset | Optional GitHub API capacity; public repositories only |
 | RUMZO_RPC_URL | Public Robinhood Chain mainnet RPC | Custom HTTP(S) provider |
 | RUMZO_DATA_DIR | .rumzo in the current directory | Local live-receipt storage |
+| RUMZO_TELEGRAM_BOT_TOKEN | Unset | Optional Telegram bot credential for the local monitor |
+| RUMZO_TELEGRAM_CHAT_ID | Unset | Destination for local monitoring alerts |
 | PORT | 4317 | Local web port |
 
 Set variables in your shell, or copy .env.example to .env and run:
