@@ -141,9 +141,49 @@
     </div>
   </section>
 
+  <section id="diff-preview" class="diff-preview" aria-labelledby="diff-preview-title">
+    <div class="section-heading">
+      <div><span class="section-number">04</span><div><div class="eyebrow">ROADMAP PREVIEW</div><h2 id="diff-preview-title">See what changed between receipts</h2></div></div>
+      <p>Two observations become one clear diff across repository and contract state.</p>
+    </div>
+
+    <div class="diff-preview-shell">
+      <div class="diff-preview-topbar">
+        <span class="preview-label"><i aria-hidden="true"></i>Illustrative preview</span>
+        <a href="https://github.com/Nekt-0/rumzo" target="_blank" rel="noreferrer">Follow the build on GitHub <span aria-hidden="true">↗</span></a>
+      </div>
+
+      <div class="observation-grid">
+        <article class="observation-card">
+          <div class="observation-title"><strong>Receipt 001</strong><span>Baseline</span></div>
+          <dl><div><dt>Commit</dt><dd>example-a</dd></div><div><dt>Block</dt><dd>100,120</dd></div><div><dt>Observed</dt><dd>06 Sep 2026 · 09:00 UTC</dd></div></dl>
+        </article>
+        <article class="observation-card">
+          <div class="observation-title"><strong>Receipt 002</strong><span>Later read</span></div>
+          <dl><div><dt>Commit</dt><dd>example-b</dd></div><div><dt>Block</dt><dd>100,142</dd></div><div><dt>Observed</dt><dd>06 Sep 2026 · 11:00 UTC</dd></div></dl>
+        </article>
+      </div>
+
+      <div class="diff-table-wrap">
+        <table class="diff-table">
+          <thead><tr><th scope="col">Evidence</th><th scope="col">Receipt 001</th><th scope="col">Receipt 002</th><th scope="col">Result</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Source</th><td data-label="Receipt 001">Baseline tree</td><td data-label="Receipt 002">New revision</td><td><span class="diff-state changed">Changed</span></td></tr>
+            <tr><th scope="row">Tests</th><td data-label="Receipt 001">Existing suite</td><td data-label="Receipt 002">New test file</td><td><span class="diff-state changed">Changed</span></td></tr>
+            <tr><th scope="row">Docs</th><td data-label="Receipt 001">README present</td><td data-label="Receipt 002">README present</td><td><span class="diff-state unchanged">Unchanged</span></td></tr>
+            <tr><th scope="row">Fees</th><td data-label="Receipt 001">Known values</td><td data-label="Receipt 002">Known values</td><td><span class="diff-state unchanged">Unchanged</span></td></tr>
+            <tr><th scope="row">Locker</th><td data-label="Receipt 001">Known</td><td data-label="Receipt 002">Unavailable</td><td><span class="diff-state unknown">Unknown</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="roadmap-line" aria-label="RUMZO roadmap"><span><i></i>v0.2 Live</span><b aria-hidden="true">→</b><span class="building">Receipt Diffs Building</span><b aria-hidden="true">→</b><span>Public API Next</span></div>
+    </div>
+  </section>
+
   <section id="faq" class="faq" aria-labelledby="faq-title">
     <div class="section-heading">
-      <div><span class="section-number">04</span><div><div class="eyebrow">FAQ</div><h2 id="faq-title">Questions the raccoon gets a lot.</h2></div></div>
+      <div><span class="section-number">05</span><div><div class="eyebrow">FAQ</div><h2 id="faq-title">Questions the raccoon gets a lot.</h2></div></div>
       <p>Short answers about what RUMZO reads, saves, and intentionally leaves alone.</p>
     </div>
     <div class="faq-list">
